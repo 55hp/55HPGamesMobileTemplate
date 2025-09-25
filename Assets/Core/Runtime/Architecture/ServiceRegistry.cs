@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace AF55HP.Mobile.Core.Architecture
+namespace hp55games.Mobile.Core.Architecture
 {
     public static class ServiceRegistry
     {

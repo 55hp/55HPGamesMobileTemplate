@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 
-namespace AF55HP.Mobile.Core.Runtime.Util
+namespace hp55games.Mobile.Core.Runtime.Util
 {
     /// <summary>
     /// Rende awaitable UnityEngine.AsyncOperation (SceneManager, Resources ecc.).

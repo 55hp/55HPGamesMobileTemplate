@@ -1,8 +1,8 @@
 // Assets/Core/Runtime/Bootstrap/ServicesSmokeTest.cs
 using UnityEngine;
-using AF55HP.Mobile.Core.Architecture;
+using hp55games.Mobile.Core.Architecture;
 
-namespace AF55HP.Mobile.Core.Bootstrap
+namespace hp55games.Mobile.Core.Bootstrap
 {
     public class ServicesSmokeTest : MonoBehaviour
     {

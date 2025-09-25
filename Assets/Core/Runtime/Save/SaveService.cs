@@ -2,7 +2,7 @@
 using System.IO;
 using UnityEngine;
 
-namespace AF55HP.Mobile.Core.Save
+namespace hp55games.Mobile.Core.Save
 {
     [System.Serializable]
     public class SaveData
@@ -12,11 +12,11 @@ namespace AF55HP.Mobile.Core.Save
     }
 }
 
-namespace AF55HP.Mobile.Core.Architecture
+namespace hp55games.Mobile.Core.Architecture
 {
     public interface ISaveService
     {
-        AF55HP.Mobile.Core.Save.SaveData Data { get; }
+        hp55games.Mobile.Core.Save.SaveData Data { get; }
         void Load();
         void Save();
     }
@@ -24,13 +24,13 @@ namespace AF55HP.Mobile.Core.Architecture
     public sealed class JsonSaveService : ISaveService
     {
         private const string FileName = "save.json";
-        public AF55HP.Mobile.Core.Save.SaveData Data { get; private set; } = new();
+        public hp55games.Mobile.Core.Save.SaveData Data { get; private set; } = new();
 
         public void Load()
         {
             var path = Path.Combine(Application.persistentDataPath, FileName);
             if (File.Exists(path))
-                Data = JsonUtility.FromJson<AF55HP.Mobile.Core.Save.SaveData>(File.ReadAllText(path));
+                Data = JsonUtility.FromJson<hp55games.Mobile.Core.Save.SaveData>(File.ReadAllText(path));
             else
                 Save();
         }

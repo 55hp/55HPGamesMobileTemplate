@@ -1,12 +1,11 @@
-using AF55HP.Mobile.Core.Architecture;
-using AF55HP.Mobile.Core.Architecture.States;
-using AF55HP.Mobile.Core.Runtime.Util;
-using UnityEditor.VersionControl;
+using hp55games.Mobile.Core.Architecture;
+using hp55games.Mobile.Core.Architecture.States;
+using hp55games.Mobile.Core.Runtime.Util;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 
-namespace AF55HP.Mobile.Core.Bootstrap
+namespace hp55games.Mobile.Core.Bootstrap
 {
     public class GameBootstrap : MonoBehaviour
     {

@@ -1,7 +1,7 @@
 // Assets/Core/Runtime/UI/UIService.cs
 using UnityEngine;
 
-namespace AF55HP.Mobile.Core.Architecture
+namespace hp55games.Mobile.Core.Architecture
 {
     public interface IUIService
     {

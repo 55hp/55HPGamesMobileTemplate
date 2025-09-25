@@ -1,7 +1,7 @@
 // Assets/Core/Runtime/Architecture/Logging/UnityLog.cs
 using UnityEngine;
 
-namespace AF55HP.Mobile.Core.Architecture
+namespace hp55games.Mobile.Core.Architecture
 {
     public sealed class UnityLog : ILog
     {

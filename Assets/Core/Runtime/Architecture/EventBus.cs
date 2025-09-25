@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 
 
-namespace AF55HP.Mobile.Core.Architecture {
+namespace hp55games.Mobile.Core.Architecture {
     public interface IEvent { }
     public interface IEventBus {
         void Publish<T>(T evt) where T : IEvent;

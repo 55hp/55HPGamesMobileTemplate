@@ -1,5 +1,5 @@
 // Assets/Core/Runtime/Architecture/Logging/ILog.cs
-namespace AF55HP.Mobile.Core.Architecture
+namespace hp55games.Mobile.Core.Architecture
 {
     public interface ILog
     {

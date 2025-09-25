@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
-using AF55HP.Mobile.Core.Runtime.Util;
+using hp55games.Mobile.Core.Runtime.Util;
 
-namespace AF55HP.Mobile.Core.Architecture.States {
+namespace hp55games.Mobile.Core.Architecture.States {
     public interface IGameState { Task Enter(); Task Exit(); }
 
     public sealed class GameStateMachine {
@@ -17,7 +17,7 @@ namespace AF55HP.Mobile.Core.Architecture.States {
 
 
 // Example state
-namespace AF55HP.Mobile.Core.Architecture.States {
+namespace hp55games.Mobile.Core.Architecture.States {
     public sealed class MainMenuState : IGameState {
         public async Task Enter() {
             await UnityEngine.SceneManagement.SceneManager.LoadSceneAsync("01_Menu");
