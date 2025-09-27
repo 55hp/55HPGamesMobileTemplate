@@ -18,7 +18,6 @@ namespace hp55games.Mobile.Core.Architecture
             Register<IUIService>(new UIService());
         }
 
-
         public static void Register<T>(T instance) => _map[typeof(T)] = instance!;
         public static T Resolve<T>() => (T)_map[typeof(T)];
 
