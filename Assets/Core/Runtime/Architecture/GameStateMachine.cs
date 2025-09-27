@@ -1,5 +1,7 @@
 using System.Threading.Tasks;
 using hp55games.Mobile.Core.Runtime.Util;
+using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace hp55games.Mobile.Core.Architecture.States {
     public interface IGameState { Task Enter(); Task Exit(); }
@@ -11,6 +13,8 @@ namespace hp55games.Mobile.Core.Architecture.States {
             if (_current != null) await _current.Exit();
             _current = next;
             if (_current != null) await _current.Enter();
+            
+            Debug.LogError("New state is: " + next.GetType().Name);
         }
     }
 }
@@ -20,7 +24,7 @@ namespace hp55games.Mobile.Core.Architecture.States {
 namespace hp55games.Mobile.Core.Architecture.States {
     public sealed class MainMenuState : IGameState {
         public async Task Enter() {
-            await UnityEngine.SceneManagement.SceneManager.LoadSceneAsync("01_Menu");
+            await UnityEngine.SceneManagement.SceneManager.LoadSceneAsync("01_Menu",LoadSceneMode.Additive);
         }
         public Task Exit() => System.Threading.Tasks.Task.CompletedTask;
     }
