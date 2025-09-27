@@ -4,6 +4,11 @@ using UnityEditor;
 using UnityEditor.PackageManager;
 using UnityEngine;
 
+using System;
+using System.Linq;
+using System.Collections.Generic;
+using System.Reflection;
+
 namespace hp55games.Editor
 {
     public static class TemplateAudit
@@ -66,22 +71,44 @@ namespace hp55games.Editor
                 w.WriteLine();
 
                 // Presence checks (class names you abbiamo definito)
-                w.WriteLine("## Presence checks (expected types)");
-                string[] expectedTypes = {
-                    "hp55games.Ui.UiManager",
-                    "hp55games.Config.ConfigService",
-                    "hp55games.Core.EventBus",
-                    "hp55games.Services.SaveService",
-                    "hp55games.Core.Logger"
-                };
-                foreach (var t in expectedTypes)
+                w.WriteLine("## Presence checks (core roles with aliases)");
+                var roleMap = new Dictionary<string, string[]>
                 {
-                    var type = System.AppDomain.CurrentDomain.GetAssemblies()
-                        .SelectMany(a => { try { return a.GetTypes(); } catch { return new System.Type[0]; } })
-                        .FirstOrDefault(x => x.FullName == t);
-                    w.WriteLine($"- {t}: {(type != null ? "FOUND" : "MISSING")}");
+                    // Role → candidati (metti prima i tuoi)
+                    ["UiManager"] = new[] {
+                        "hp55games.Ui.UiManager",                      // standard audit
+                        "hp55games.Mobile.Core.Architecture.UIManager"// se in futuro lo chiami così
+                    },
+                    ["ConfigService"] = new[] {
+                        "hp55games.Mobile.Core.Architecture.ConfigService",
+                        "hp55games.Config.ConfigService"
+                    },
+                    ["EventBus"] = new[] {
+                        "hp55games.Mobile.Core.Architecture.EventBus",
+                        "hp55games.Core.EventBus"
+                    },
+                    ["SaveService"] = new[] {
+                        "hp55games.Mobile.Core.SaveService",
+                        "hp55games.Services.SaveService"
+                    },
+                    ["Logger"] = new[] {
+                        "hp55games.Mobile.Core.Architecture.UnityLog",
+                        "hp55games.Core.Logger"
+                    },
+                };
+
+                foreach (var kv in roleMap)
+                {
+                    var role = kv.Key;
+                    var candidates = kv.Value;
+                    var t = TypeFinder.FindFirst(candidates);
+                    if (t != null)
+                        w.WriteLine($"- {role}: FOUND → `{t.FullName}`");
+                    else
+                        w.WriteLine($"- {role}: MISSING (tried: {string.Join(", ", candidates)})");
                 }
                 w.WriteLine();
+
 
                 // Tests
                 w.WriteLine("## Tests folders");
@@ -98,5 +125,26 @@ namespace hp55games.Editor
             EditorUtility.RevealInFinder(Path.GetFullPath(outPath));
             Debug.Log($"[hp55games] Template audit exported to: {outPath}");
         }
+    }
+}
+
+
+static class TypeFinder
+{
+    public static Type FindFirst(params string[] fullyQualifiedNames)
+    {
+        var asms = AppDomain.CurrentDomain.GetAssemblies();
+        foreach (var fqn in fullyQualifiedNames)
+        {
+            if (string.IsNullOrWhiteSpace(fqn)) continue;
+            var t = asms.SelectMany(a => SafeGetTypes(a)).FirstOrDefault(x => x.FullName == fqn);
+            if (t != null) return t;
+        }
+        return null;
+    }
+
+    static IEnumerable<Type> SafeGetTypes(Assembly a)
+    {
+        try { return a.GetTypes(); } catch { return Array.Empty<Type>(); }
     }
 }
