@@ -1,4 +1,3 @@
-// Assets/Core/Runtime/Bootstrap/ServicesSmokeTest.cs
 using UnityEngine;
 using hp55games.Mobile.Core.Architecture;
 

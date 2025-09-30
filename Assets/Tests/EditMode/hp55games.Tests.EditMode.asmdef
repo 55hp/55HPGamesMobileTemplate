@@ -2,10 +2,10 @@
     "name": "AssetsTestsEditModeCorePresenceTests.cs(1,7)errorCS0246Thetypeornamespacename'NUnit'couldnotbefound(areyoumissingausingdirectiveoranassemblyreference)",
     "rootNamespace": "",
     "references": [],
-    "includePlatforms": [],
-    "excludePlatforms": [
+    "includePlatforms": [
         "Editor"
     ],
+    "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": false,
     "precompiledReferences": [],
