@@ -12,8 +12,8 @@ namespace hp55games.Mobile.Core.Architecture
         {
             Register<ILog>(new UnityLog());
             Register<IEventBus>(new EventBus());
-            Register<IConfigService>(new LocalConfigService());
-            Register<ISaveService>(new JsonSaveService());
+            Register<IConfigService>(new ConfigService());
+            Register<ISaveService>(new SaveService());
             Register<IContentLoader>(new BasicContentLoader());
             Register<IUIService>(new UIService());
         }

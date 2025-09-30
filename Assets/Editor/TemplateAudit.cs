@@ -88,7 +88,7 @@ namespace hp55games.Editor
                         "hp55games.Core.EventBus"
                     },
                     ["SaveService"] = new[] {
-                        "hp55games.Mobile.Core.SaveService",
+                        "hp55games.Mobile.Core.Architecture.SaveService",
                         "hp55games.Services.SaveService"
                     },
                     ["Logger"] = new[] {

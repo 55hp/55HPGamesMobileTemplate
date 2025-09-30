@@ -1,5 +1,5 @@
 # hp55games – Template Audit
-Generated: 25/09/2025 19:48:33
+Generated: 30/09/2025 18:36:40
 
 ## Unity/Project
 - Application.unityVersion: `2022.3.62f1`
@@ -13,20 +13,15 @@ Generated: 25/09/2025 19:48:33
 - "com.unity.2d.sprite": "1.0.0",
 - "com.unity.2d.tilemap": "1.0.0",
 - "com.unity.cinemachine": "2.10.5",
-- "com.unity.collab-proxy": "2.9.3",
 - "com.unity.ide.rider": "3.0.36",
-- "com.unity.ide.visualstudio": "2.0.22",
-- "com.unity.ide.vscode": "1.2.5",
 - "com.unity.inputsystem": "1.14.2",
 - "com.unity.localization": "1.5.7",
 - "com.unity.mobile.notifications": "2.4.2",
 - "com.unity.render-pipelines.universal": "14.0.12",
-- "com.unity.services.analytics": "6.1.1",
 - "com.unity.test-framework": "1.1.33",
 - "com.unity.textmeshpro": "3.0.9",
 - "com.unity.timeline": "1.7.7",
 - "com.unity.ugui": "1.0.0",
-- "com.unity.visualscripting": "1.9.4",
 - "com.unity.modules.ai": "1.0.0",
 - "com.unity.modules.androidjni": "1.0.0",
 - "com.unity.modules.animation": "1.0.0",
@@ -65,6 +60,8 @@ Generated: 25/09/2025 19:48:33
 - Assets/Core/Runtime/UI/UI.Runtime.asmdef
 - Assets/Game/Content/Game.Content.asmdef
 - Assets/Game/Features/Game.Features.asmdef
+- Assets/Tests/EditMode/hp55games.Tests.EditMode.asmdef
+- Assets/Tests/PlayMode/hp55games.Tests.PlayMode.asmdef
 - Packages/com.unity.2d.pixel-perfect/Editor/Unity.2D.PixelPerfect.Editor.asmdef
 - Packages/com.unity.2d.pixel-perfect/Runtime/Unity.2D.PixelPerfect.asmdef
 - Packages/com.unity.2d.pixel-perfect/Tests/Editor/Unity.2D.PixelPerfect.Editor.Tests.asmdef
@@ -85,12 +82,7 @@ Generated: 25/09/2025 19:48:33
 - Packages/com.unity.cinemachine/Runtime/com.unity.cinemachine.asmdef
 - Packages/com.unity.cinemachine/Tests/Editor/Cinemachine.Editor.Tests.asmdef
 - Packages/com.unity.cinemachine/Tests/Runtime/Cinemachine.Runtime.Tests.asmdef
-- Packages/com.unity.collab-proxy/Editor/Entities/Unity.PlasticSCM.Editor.Entities.asmdef
-- Packages/com.unity.collab-proxy/Editor/Toolbar/Unity.CollabProxy.Editor.asmdef
-- Packages/com.unity.collab-proxy/Editor/Unity.PlasticSCM.Editor.asmdef
 - Packages/com.unity.ide.rider/Rider/Editor/com.unity.ide.rider.asmdef
-- Packages/com.unity.ide.visualstudio/Editor/com.unity.ide.visualstudio.asmdef
-- Packages/com.unity.ide.vscode/Editor/Unity.com.unity.vscode.Editor.asmdef
 - Packages/com.unity.inputsystem/DocCodeSamples.Tests/DocCodeSamples.asmdef
 - Packages/com.unity.inputsystem/InputSystem/Plugins/InputForUI/InputSystemForUI.asmdef
 - Packages/com.unity.inputsystem/InputSystem/Unity.InputSystem.asmdef
@@ -133,24 +125,6 @@ Generated: 25/09/2025 19:48:33
 - Packages/com.unity.scriptablebuildpipeline/Tests/Runtime/Unity.ScriptableBuildPipeline.Runtime.Tests.asmdef
 - Packages/com.unity.searcher/Editor/Unity.Searcher.Editor.asmdef
 - Packages/com.unity.searcher/Tests/Editor/Unity.Searcher.EditorTests.asmdef
-- Packages/com.unity.services.analytics/Editor/Unity.Services.Analytics.Editor.asmdef
-- Packages/com.unity.services.analytics/Runtime/Unity.Services.Analytics.asmdef
-- Packages/com.unity.services.core/Editor/Core/Configuration/Unity.Services.Core.Configuration.Editor.asmdef
-- Packages/com.unity.services.core/Editor/Core/Environments/Unity.Services.Core.Environments.Editor.asmdef
-- Packages/com.unity.services.core/Editor/Core/Unity.Services.Core.Editor.asmdef
-- Packages/com.unity.services.core/Runtime/Analytics/Unity.Services.Core.Analytics.asmdef
-- Packages/com.unity.services.core/Runtime/Components/Unity.Services.Core.Components.asmdef
-- Packages/com.unity.services.core/Runtime/Configuration/Unity.Services.Core.Configuration.asmdef
-- Packages/com.unity.services.core/Runtime/Core.Internal/Unity.Services.Core.Internal.asmdef
-- Packages/com.unity.services.core/Runtime/Core/Unity.Services.Core.asmdef
-- Packages/com.unity.services.core/Runtime/Device/Unity.Services.Core.Device.asmdef
-- Packages/com.unity.services.core/Runtime/Environments/Internal/Unity.Services.Core.Environments.Internal.asmdef
-- Packages/com.unity.services.core/Runtime/Environments/Unity.Services.Core.Environments.asmdef
-- Packages/com.unity.services.core/Runtime/Networking/Unity.Services.Core.Networking.asmdef
-- Packages/com.unity.services.core/Runtime/Registration/Unity.Services.Core.Registration.asmdef
-- Packages/com.unity.services.core/Runtime/Scheduler/Unity.Services.Core.Scheduler.asmdef
-- Packages/com.unity.services.core/Runtime/Telemetry/Unity.Services.Core.Telemetry.asmdef
-- Packages/com.unity.services.core/Runtime/Threading/Unity.Services.Core.Threading.asmdef
 - Packages/com.unity.shadergraph/Editor/Unity.ShaderGraph.Editor.asmdef
 - Packages/com.unity.shadergraph/Editor/Utilities/Unity.ShaderGraph.Utilities.asmdef
 - Packages/com.unity.shadergraph/ShaderGraphLibrary/Unity.RenderPipelines.ShaderGraph.ShaderGraphLibrary.asmdef
@@ -168,14 +142,6 @@ Generated: 25/09/2025 19:48:33
 - Packages/com.unity.ugui/Runtime/UnityEngine.UI.asmdef
 - Packages/com.unity.ugui/Tests/Editor/UnityEditor.UI.EditorTests.asmdef
 - Packages/com.unity.ugui/Tests/Runtime/UnityEngine.UI.Tests.asmdef
-- Packages/com.unity.visualscripting/Editor/SettingsProvider/Unity.VisualScripting.SettingsProvider.Editor.asmdef
-- Packages/com.unity.visualscripting/Editor/VisualScripting.Core/Unity.VisualScripting.Core.Editor.asmdef
-- Packages/com.unity.visualscripting/Editor/VisualScripting.Flow/Unity.VisualScripting.Flow.Editor.asmdef
-- Packages/com.unity.visualscripting/Editor/VisualScripting.Shared/Unity.VisualScripting.Shared.Editor.asmdef
-- Packages/com.unity.visualscripting/Editor/VisualScripting.State/Unity.VisualScripting.State.Editor.asmdef
-- Packages/com.unity.visualscripting/Runtime/VisualScripting.Core/Unity.VisualScripting.Core.asmdef
-- Packages/com.unity.visualscripting/Runtime/VisualScripting.Flow/Unity.VisualScripting.Flow.asmdef
-- Packages/com.unity.visualscripting/Runtime/VisualScripting.State/Unity.VisualScripting.State.asmdef
 
 ## Scenes in Assets/Scenes
 - Assets/Scenes/00_Bootstrap.unity
@@ -186,18 +152,18 @@ Generated: 25/09/2025 19:48:33
 - Assets/Scenes/Additive/UI_Root.unity
 
 ## UI Prefabs (Assets/UI/Prefabs)
-- Assets/UI/Prefabs/UI_LoadingOverlay.prefab
-- Assets/UI/Prefabs/UI_Toast.prefab
+- Assets/UI/Prefabs/UILoadingOverlay.prefab
 - Assets/UI/Prefabs/UIPopup_Generic.prefab
 - Assets/UI/Prefabs/UIRoot.prefab
+- Assets/UI/Prefabs/UIToast.prefab
 
-## Presence checks (expected types)
-- hp55games.Ui.UiManager: MISSING
-- hp55games.Config.ConfigService: MISSING
-- hp55games.Core.EventBus: MISSING
-- hp55games.Services.SaveService: MISSING
-- hp55games.Core.Logger: MISSING
+## Presence checks (core roles with aliases)
+- UiManager: FOUND → `hp55games.Ui.UiManager`
+- ConfigService: FOUND → `hp55games.Mobile.Core.Architecture.ConfigService`
+- EventBus: FOUND → `hp55games.Mobile.Core.Architecture.EventBus`
+- SaveService: FOUND → `hp55games.Mobile.Core.Architecture.SaveService`
+- Logger: FOUND → `hp55games.Mobile.Core.Architecture.UnityLog`
 
 ## Tests folders
-- Assets/Tests/EditMode: missing
-- Assets/Tests/PlayMode: missing
+- Assets/Tests/EditMode: present
+- Assets/Tests/PlayMode: present

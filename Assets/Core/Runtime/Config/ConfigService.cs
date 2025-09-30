@@ -18,10 +18,10 @@ namespace hp55games.Mobile.Core.Architecture
         hp55games.Mobile.Core.Config.GameConfig Current { get; }
     }
 
-    public sealed class LocalConfigService : IConfigService
+    public sealed class ConfigService : IConfigService
     {
         public hp55games.Mobile.Core.Config.GameConfig Current { get; private set; }
-        public LocalConfigService()
+        public ConfigService()
         {
             // Metti il tuo asset in: Assets/Resources/Configs/GameConfig.asset
             Current = Resources.Load<hp55games.Mobile.Core.Config.GameConfig>("Configs/GameConfig");

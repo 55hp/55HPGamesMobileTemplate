@@ -21,7 +21,7 @@ namespace hp55games.Mobile.Core.Architecture
         void Save();
     }
 
-    public sealed class JsonSaveService : ISaveService
+    public sealed class SaveService : ISaveService
     {
         private const string FileName = "save.json";
         public hp55games.Mobile.Core.SaveService.SaveData Data { get; private set; } = new();
