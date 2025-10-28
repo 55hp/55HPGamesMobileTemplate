@@ -21,8 +21,8 @@ namespace hp55games.Mobile.Core.Bootstrap
         {
             DontDestroyOnLoad(gameObject);
             ServiceRegistry.InstallDefaults();
-            await SceneManager.LoadSceneAsync("Scenes/Additive/UI_Root", LoadSceneMode.Additive);
-            await SceneManager.LoadSceneAsync("Scenes/Additive/Systems_Audio", LoadSceneMode.Additive);
+            await SceneManager.LoadSceneAsync("Scenes/Additive/91_UI_Root", LoadSceneMode.Additive);
+            await SceneManager.LoadSceneAsync("Scenes/Additive/90_Systems_Audio", LoadSceneMode.Additive);
             GameStateMachine.Instance.SetState(new MainMenuState());
         }
     }

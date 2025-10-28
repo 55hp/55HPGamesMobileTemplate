@@ -9,9 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d0a5827073b36fd4198e7f6f2a774d99, type: 3}
-  m_Name: GameConfig
+  m_Script: {fileID: 11500000, guid: 3a189bb168d8d90478a09ea08c2f3d72, type: 3}
+  m_Name: DefaultObject
   m_EditorClassIdentifier: 
-  appVersion: 
-  enableHaptics: 1
-  defaultDifficulty: 1
+  m_AddressableAssetSettingsGuid: d47609f78f9d79048af22e29efe0bf34

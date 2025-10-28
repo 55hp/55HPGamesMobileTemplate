@@ -812,7 +812,7 @@ PlayerSettings:
   webGLMemoryGeometricGrowthCap: 96
   webGLPowerPreference: 2
   scriptingDefineSymbols:
-    Android: GAME_2D;GAME_3D;IAP_ENABLED;ADS_ENABLED;ANALYTICS_ENABLED
+    Android: GAME_2D;GAME_3D;IAP_ENABLED;ADS_ENABLED;ANALYTICS_ENABLED;UNITY_INCLUDE_TESTS
     Standalone: GAME_2D;GAME_3D
   additionalCompilerArguments: {}
   platformArchitecture: {}
