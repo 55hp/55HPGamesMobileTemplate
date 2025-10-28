@@ -1,11 +1,11 @@
 {
-    "name": "AssetsTestsEditModeCorePresenceTests.cs(1,7)errorCS0246Thetypeornamespacename'NUnit'couldnotbefound(areyoumissingausingdirectiveoranassemblyreference)",
+    "name": "hp55games.Tests.EditMode",
     "rootNamespace": "",
     "references": [],
-    "includePlatforms": [],
-    "excludePlatforms": [
+    "includePlatforms": [
         "Editor"
     ],
+    "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": false,
     "precompiledReferences": [],

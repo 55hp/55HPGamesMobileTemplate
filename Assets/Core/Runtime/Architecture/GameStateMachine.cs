@@ -14,7 +14,7 @@ namespace hp55games.Mobile.Core.Architecture.States {
             _current = next;
             if (_current != null) await _current.Enter();
             
-            Debug.LogError("New state is: " + next.GetType().Name);
+            Debug.Log("New state is: " + next.GetType().Name);
         }
     }
 }

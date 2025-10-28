@@ -1,16 +1,5 @@
 using UnityEngine;
 
-
-namespace hp55games.Mobile.Core.Config
-{
-    [CreateAssetMenu(menuName="Config/GameConfig")]
-    public class GameConfig : ScriptableObject {
-        public string appVersion;
-        public bool enableHaptics = true;
-        public int defaultDifficulty = 1;
-    }
-}
-
 namespace hp55games.Mobile.Core.Architecture
 {
     public interface IConfigService
@@ -21,15 +10,15 @@ namespace hp55games.Mobile.Core.Architecture
     public sealed class ConfigService : IConfigService
     {
         public hp55games.Mobile.Core.Config.GameConfig Current { get; private set; }
-        public ConfigService()
+
+        // Per ora referenza serializzata da Inspector, niente Resources
+        public ConfigService(hp55games.Mobile.Core.Config.GameConfig cfg)
         {
-            // Metti il tuo asset in: Assets/Resources/Configs/GameConfig.asset
-            Current = Resources.Load<hp55games.Mobile.Core.Config.GameConfig>("Configs/GameConfig");
-            if (Current == null)
+            if (cfg == null)
             {
-                Debug.LogWarning("GameConfig non trovato in Resources/Configs/. Creane uno dal menu.");
-                Current = ScriptableObject.CreateInstance<hp55games.Mobile.Core.Config.GameConfig>();
+                Debug.LogError("[ConfigService] GameConfig mancante.");
             }
+            Current = cfg;
         }
     }
 }

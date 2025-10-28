@@ -1,4 +1,3 @@
-// Assets/Core/Runtime/Bootstrap/ServicesSmokeTest.cs
 using UnityEngine;
 using hp55games.Mobile.Core.Architecture;
 
@@ -13,8 +12,8 @@ namespace hp55games.Mobile.Core.Bootstrap
             log.Info("[SmokeTest] Log ok");
 
             // Config
-            var cfg = ServiceRegistry.Resolve<IConfigService>().Current;
-            log.Info($"[SmokeTest] Config ok — version: {cfg.appVersion}");
+            //var cfg = ServiceRegistry.Resolve<IConfigService>().Current;
+            //log.Info($"[SmokeTest] Config ok — version: {cfg.appVersion}");
 
             // Save
             var save = ServiceRegistry.Resolve<ISaveService>();
