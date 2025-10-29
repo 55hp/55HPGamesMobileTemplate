@@ -9,6 +9,10 @@ namespace hp55games.Mobile.Core.Architecture
     {
         Task<T> LoadAsync<T>(string address) where T : class;
         void Release<T>(T asset);
+
+        // 👇 nuove API per istanze (consigliate per UI/FX)
+        Task<GameObject> InstantiateAsync(string address, Transform parent = null, bool worldPositionStays = false);
+        void ReleaseInstance(GameObject instance);
     }
 
     /// <summary>
@@ -30,6 +34,31 @@ namespace hp55games.Mobile.Core.Architecture
             // Nota: restituisco l'oggetto, ma NON rilascio l'handle qui.
             // Addressables gestisce reference-counting tramite l'oggetto; useremo Release(obj) quando non serve più.
             return result;
+        }
+        
+        public async Task<GameObject> InstantiateAsync(string address, Transform parent = null, bool worldPositionStays = false)
+        {
+            // parent null = instanzia in root; per UI passa il Canvas.transform
+            var handle = Addressables.InstantiateAsync(address, parent);
+            var instance = await handle.Task;
+
+            if (instance == null)
+                Debug.LogError($"[ContentLoader] InstantiateAsync null. Address='{address}'");
+
+            // Se vuoi forzare gli ancoraggi UI:
+            if (!worldPositionStays && instance != null)
+            {
+                var rt = instance.transform as RectTransform;
+                if (rt != null && parent != null) rt.SetParent(parent, false);
+            }
+
+            return instance;
+        }
+
+        public void ReleaseInstance(GameObject instance)
+        {
+            if (instance != null)
+                Addressables.ReleaseInstance(instance);
         }
 
         public void Release<T>(T asset)
