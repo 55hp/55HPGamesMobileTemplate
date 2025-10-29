@@ -1,31 +1,78 @@
+using System;
+using System.Threading;
 using System.Threading.Tasks;
-using hp55games.Mobile.Core.Runtime.Util;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
-namespace hp55games.Mobile.Core.Architecture.States {
-    public interface IGameState { Task Enter(); Task Exit(); }
+namespace hp55games.Mobile.Core.Architecture.States
+{
+    public sealed class GameStateMachine
+    {
+        // Singleton leggero (se già esiste in scena, rimuovi o adatta)
+        private static GameStateMachine _instance;
+        public static GameStateMachine Instance => _instance ??= new GameStateMachine();
 
-    public sealed class GameStateMachine {
-        public static GameStateMachine Instance { get; } = new();
-        IGameState _current;
-        public async void SetState(IGameState next){
-            if (_current != null) await _current.Exit();
-            _current = next;
-            if (_current != null) await _current.Enter();
-            
-            Debug.Log("New state is: " + next.GetType().Name);
+        private readonly object _lock = new();
+        private IGameState _current;
+        private bool _isTransitioning;
+        private CancellationTokenSource _cts;
+
+        /// <summary>Stato attuale (può essere null all’avvio).</summary>
+        public IGameState Current => _current;
+
+        /// <summary>
+        /// Cambia stato in modo sicuro. Se una transizione è in corso, quella nuova attende.
+        /// </summary>
+        public async Task ChangeStateAsync(IGameState next)
+        {
+            if (next == null) throw new ArgumentNullException(nameof(next));
+
+            // Garantiamo una sola transizione alla volta
+            lock (_lock)
+            {
+                if (_isTransitioning) throw new InvalidOperationException("State transition already in progress.");
+                _isTransitioning = true;
+
+                // cancella eventuale ciclo dello stato precedente
+                _cts?.Cancel();
+                _cts = new CancellationTokenSource();
+            }
+
+            try
+            {
+                var ct = _cts.Token;
+
+                // 1) Exit del precedente
+                if (_current != null)
+                {
+                    try { await _current.ExitAsync(ct); }
+                    catch (OperationCanceledException) { /* ok */ }
+                    catch (Exception ex) { Debug.LogException(ex); }
+                }
+
+                // 2) Enter del nuovo
+                _current = next;
+                try { await _current.EnterAsync(ct); }
+                catch (OperationCanceledException) { /* ok */ }
+                catch (Exception ex)
+                {
+                    Debug.LogException(ex);
+                    // rollback in caso di fallimento? a discrezione:
+                    // _current = null;
+                }
+            }
+            finally
+            {
+                lock (_lock)
+                {
+                    _isTransitioning = false;
+                }
+            }
         }
-    }
-}
 
-
-// Example state
-namespace hp55games.Mobile.Core.Architecture.States {
-    public sealed class MainMenuState : IGameState {
-        public async Task Enter() {
-            await UnityEngine.SceneManagement.SceneManager.LoadSceneAsync("01_Menu",LoadSceneMode.Additive);
+        /// <summary>Annulla lo stato corrente (utile a fine gioco o reload completo).</summary>
+        public void CancelCurrent()
+        {
+            _cts?.Cancel();
         }
-        public Task Exit() => System.Threading.Tasks.Task.CompletedTask;
     }
 }

@@ -6,28 +6,30 @@ public class ContentSmokeTest : MonoBehaviour
 {
     private async void Start()
     {
-        var loader = ServiceRegistry.Resolve<IContentLoader>();
+        // 1) Attendi che il Canvas sia disponibile (max ~3 sec)
+        Canvas canvas = null;
+        for (int i = 0; i < 180 && canvas == null; i++) // 180 frame ~ 3s @60fps
+        {
+            canvas = FindFirstObjectByType<Canvas>();
+            await Task.Yield();
+        }
 
-        // 1) Carica il prefab addressable
-        var prefab = await loader.LoadAsync<GameObject>(hp55games.Addr.Content.UI.Popup_Generic);
-        if (prefab == null) { Debug.LogError("Popup prefab null"); return; }
-
-        // 2) Trova un Canvas già in scena (da 91_UI_Root)
-        var canvas = FindFirstObjectByType<Canvas>();
         if (canvas == null)
         {
-            Debug.LogError("Nessun Canvas trovato in scena. Carica 91_UI_Root prima di istanziare UI.");
+            Debug.LogError("Nessun Canvas trovato (anche dopo attesa). Verifica che 91_UI_Root sia in scena.");
             return;
         }
 
-        // 3) Instanzia e fai il parenting sotto il Canvas (mantieni ancoraggi)
+        // 2) Carica e istanzia il popup sotto il Canvas
+        var loader = ServiceRegistry.Resolve<IContentLoader>();
+        var prefab = await loader.LoadAsync<GameObject>(hp55games.Addr.Content.UI.Popup_Generic);
+        if (prefab == null) { Debug.LogError("Popup prefab null"); return; }
+
         var go = Instantiate(prefab);
-        var t = go.transform as RectTransform;
-        t.SetParent(canvas.transform, false); // false = conserva ancoraggi/scala del prefab
+        var rt = go.transform as RectTransform;
+        rt.SetParent(canvas.transform, false);
+        rt.anchoredPosition = Vector2.zero;
 
-        // (opz) centra l’ancoraggio se necessario
-        t.anchoredPosition = Vector2.zero;
-
-        Debug.Log("[ContentSmokeTest] Popup instanziato sotto Canvas.");
+        Debug.Log("[ContentSmokeTest] Popup instanziato sotto Canvas (dopo attesa).");
     }
 }
