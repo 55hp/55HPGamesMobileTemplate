@@ -21,9 +21,15 @@ namespace hp55games.Mobile.Core.Bootstrap
         {
             DontDestroyOnLoad(gameObject);
             ServiceRegistry.InstallDefaults();
+
+            // ← inizializza la config registrata dal registry
+            await ServiceRegistry.Resolve<IConfigService>().InitializeAsync();
+
             await SceneManager.LoadSceneAsync("Scenes/Additive/91_UI_Root", LoadSceneMode.Additive);
             await SceneManager.LoadSceneAsync("Scenes/Additive/90_Systems_Audio", LoadSceneMode.Additive);
+
             GameStateMachine.Instance.SetState(new MainMenuState());
         }
+
     }
 }
