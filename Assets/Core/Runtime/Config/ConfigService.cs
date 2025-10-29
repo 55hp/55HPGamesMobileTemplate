@@ -22,7 +22,7 @@ namespace hp55games.Mobile.Core.Architecture
     /// </summary>
     public sealed class ConfigService : IConfigService
     {
-        private const string ADDRESS = "config/main";
+        private const string ADDRESS = hp55games.Addr.Config.Main;
 
         private AsyncOperationHandle<GameConfig>? _handle;
         private Task _initTask; // evita doppie inizializzazioni concorrenti

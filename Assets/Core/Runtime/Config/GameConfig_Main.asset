@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 86a1555194cba74489f8aba319d2d54a, type: 3}
   m_Name: GameConfig_Main
   m_EditorClassIdentifier: 
-  appVersion: 
+  appVersion: v1.0.0
   enableHaptics: 1
-  defaultDifficulty: 1
+  defaultDifficulty: 100
