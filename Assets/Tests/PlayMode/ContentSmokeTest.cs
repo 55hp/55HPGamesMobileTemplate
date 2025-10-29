@@ -6,30 +6,23 @@ public class ContentSmokeTest : MonoBehaviour
 {
     private async void Start()
     {
-        // 1) Attendi che il Canvas sia disponibile (max ~3 sec)
+        // 1) Attendi il Canvas (come già fatto)
         Canvas canvas = null;
-        for (int i = 0; i < 180 && canvas == null; i++) // 180 frame ~ 3s @60fps
+        for (int i = 0; i < 180 && canvas == null; i++)
         {
             canvas = FindFirstObjectByType<Canvas>();
             await Task.Yield();
         }
+        if (canvas == null) { Debug.LogError("Canvas non trovato"); return; }
 
-        if (canvas == null)
-        {
-            Debug.LogError("Nessun Canvas trovato (anche dopo attesa). Verifica che 91_UI_Root sia in scena.");
-            return;
-        }
-
-        // 2) Carica e istanzia il popup sotto il Canvas
+        // 2) Instanzia direttamente via Addressables (niente Instantiate+SetParent manuale)
         var loader = ServiceRegistry.Resolve<IContentLoader>();
-        var prefab = await loader.LoadAsync<GameObject>(hp55games.Addr.Content.UI.Popup_Generic);
-        if (prefab == null) { Debug.LogError("Popup prefab null"); return; }
+        var popup = await loader.InstantiateAsync(hp55games.Addr.Content.UI.Popup_Generic, canvas.transform);
 
-        var go = Instantiate(prefab);
-        var rt = go.transform as RectTransform;
-        rt.SetParent(canvas.transform, false);
-        rt.anchoredPosition = Vector2.zero;
+        Debug.Log("[ContentSmokeTest] Popup instanziato via Addressables.InstantiateAsync");
 
-        Debug.Log("[ContentSmokeTest] Popup instanziato sotto Canvas (dopo attesa).");
+        // (Facoltativo) dopo X secondi rilascia
+        // await Task.Delay(2000);
+        // loader.ReleaseInstance(popup);
     }
 }
