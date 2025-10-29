@@ -7,16 +7,16 @@ namespace hp55games.Mobile.Core.Architecture
     {
         static readonly Dictionary<Type, object> _map = new();
 
-
         public static void InstallDefaults()
         {
             Register<ILog>(new UnityLog());
             Register<IEventBus>(new EventBus());
-            //Register<IConfigService>(new ConfigService());
+            Register<IConfigService>(new ConfigService());
             Register<ISaveService>(new SaveService());
             Register<IContentLoader>(new BasicContentLoader());
             Register<IUIService>(new UIService());
         }
+
 
         public static void Register<T>(T instance) => _map[typeof(T)] = instance!;
         public static T Resolve<T>() => (T)_map[typeof(T)];
