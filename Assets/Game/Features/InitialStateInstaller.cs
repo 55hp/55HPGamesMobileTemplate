@@ -21,7 +21,10 @@ public sealed class InitialStateInstaller : MonoBehaviour
     private async Task SetInitialStateAsync()
     {
         // Qui puoi scegliere lo stato iniziale del tuo gioco (Game layer)
-        await GameStateMachine.Instance.ChangeStateAsync(new MainMenuState());
+        await hp55games.Mobile.Core.Architecture.ServiceRegistry
+            .Resolve<hp55games.Mobile.Core.Architecture.States.IGameStateMachine>()
+            .ChangeStateAsync(new MainMenuState());
+
     }
 }
 
