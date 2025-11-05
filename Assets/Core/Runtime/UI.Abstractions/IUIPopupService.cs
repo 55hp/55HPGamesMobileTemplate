@@ -8,6 +8,7 @@ namespace hp55games.Mobile.Core.UI
         Task<GameObject> OpenAsync(string address);
         Task<T> OpenAsync<T>(string address) where T : Component;
         void Close(GameObject popup);
+        void CloseTop();
         void CloseAll();
     }
 }

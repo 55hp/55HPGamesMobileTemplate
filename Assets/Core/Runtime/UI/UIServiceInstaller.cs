@@ -4,12 +4,16 @@ using hp55games.Mobile.Core.UI;
 
 namespace hp55games.Mobile.UI
 {
+    /// <summary>
+    /// Aggancialo in 91_UI_Root (qualsiasi GO). Registra i servizi UI.
+    /// </summary>
     public sealed class UIServiceInstaller : MonoBehaviour
     {
-        void Awake()
+        private void Awake()
         {
             ServiceRegistry.Register<IUIPopupService>(new UIPopupService());
-            //TODO implementa gli altri servizi
+            ServiceRegistry.Register<IUINavigationService>(new UINavigationService());
+            ServiceRegistry.Register<IUIOverlayService>(new UIOverlayService());
         }
     }
 }

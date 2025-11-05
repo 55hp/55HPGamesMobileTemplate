@@ -16,12 +16,7 @@ MonoBehaviour:
   m_Data:
     m_SerializedData: []
   m_GUID: c945e8931ff2cd04fa9ee9b18182fe30
-  m_SerializeEntries:
-  - m_GUID: 6b03290d5ea5b344cb90e6222f0f0afe
-    m_Address: content/ui/popup_generic
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
+  m_SerializeEntries: []
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: d47609f78f9d79048af22e29efe0bf34, type: 2}
   m_SchemaSet:

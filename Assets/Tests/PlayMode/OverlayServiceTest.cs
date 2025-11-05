@@ -2,14 +2,12 @@ using System.Threading.Tasks;
 using UnityEngine;
 using hp55games.Mobile.Core.Architecture;
 using hp55games.Mobile.Core.UI;
-using hp55games.Ui;
 
-public class PopupServiceTest2 : MonoBehaviour
+public class OverlayServiceTest : MonoBehaviour
 {
     private async void Start()
     {
-        // 1) Attendi che l'installer UI abbia registrato il servizio
-        IUIPopupService asd = null;
+        IUIOverlayService asd = null;
         for (int i = 0; i < 300 && asd == null; i++) // ~5s @60fps
         {
             if (ServiceRegistry.TryResolve(out asd))
@@ -18,7 +16,7 @@ public class PopupServiceTest2 : MonoBehaviour
         }
         if (asd == null)
         {
-            Debug.LogError("UIPopupService non disponibile (91_UI_Root non ancora caricata?).");
+            Debug.LogError("IUIOverlayService non disponibile (91_UI_Root non ancora caricata?).");
             return;
         }
 
@@ -35,19 +33,18 @@ public class PopupServiceTest2 : MonoBehaviour
             return;
         }
         
-        // attesa breve per dare tempo a 91_UI_Root di registrare i servizi
         await Task.Yield();
+        var overlay = ServiceRegistry.Resolve<IUIOverlayService>();
 
-        var svc = ServiceRegistry.Resolve<IUIPopupService>();
+        await overlay.FadeInAsync(0.15f);
+        await Task.Delay(400);
+        overlay.BlockInput(true);
 
-        // 👇 ora ottieni direttamente il componente
-        var popup = await svc.OpenAsync<UIPopup_Generic>(hp55games.Addr.Content.UI.Popup_Generic);
-        if (popup != null)
-        {
-            // esempio: setta un testo o collega un bottone
-            // popup.SetMessage("Hello!");
-            await Task.Delay(5200);
-            svc.Close(popup.gameObject);
-        }
+        await overlay.ShowLoadingAsync("Caricamento…");
+        await Task.Delay(1000);
+        overlay.HideLoading();
+
+        await overlay.FadeOutAsync(0.15f);
+        overlay.BlockInput(false);
     }
 }
