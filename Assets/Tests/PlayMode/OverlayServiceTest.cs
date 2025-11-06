@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using UnityEngine;
 using hp55games.Mobile.Core.Architecture;
@@ -33,18 +34,31 @@ public class OverlayServiceTest : MonoBehaviour
             return;
         }
         
-        await Task.Yield();
-        var overlay = ServiceRegistry.Resolve<IUIOverlayService>();
+    }
 
-        await overlay.FadeInAsync(0.15f);
-        await Task.Delay(400);
-        overlay.BlockInput(true);
 
-        await overlay.ShowLoadingAsync("Caricamento…");
-        await Task.Delay(1000);
-        overlay.HideLoading();
+    private async void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.A))
+        {
+            Debug.Log("Inizio Test");
+        
+            await Task.Yield();
+            var overlay = ServiceRegistry.Resolve<IUIOverlayService>();
 
-        await overlay.FadeOutAsync(0.15f);
-        overlay.BlockInput(false);
+            await overlay.FadeInAsync(0.15f);
+            await Task.Delay(400);
+            overlay.BlockInput(true);
+
+            await overlay.ShowLoadingAsync("Caricamento…");
+            await Task.Delay(1000);
+            overlay.HideLoading();
+
+            await overlay.FadeOutAsync(0.15f);
+            overlay.BlockInput(false);
+        
+        
+            Debug.Log("Fine Test");
+        }
     }
 }
