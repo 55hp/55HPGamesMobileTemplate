@@ -1,14 +1,27 @@
 // Assets/Core/Runtime/Save/SaveService.cs
+
+using System;
 using System.IO;
 using UnityEngine;
 
 namespace hp55games.Mobile.Core.SaveService
 {
-    [System.Serializable]
+    [Serializable]
     public class SaveData
     {
         public int coins;
         public string lastProfile = "default";
+        
+        public OptionsData options = new OptionsData(); 
+    }
+    
+    [Serializable]
+    public class OptionsData
+    {
+        public float music = 0.8f;
+        public float sfx   = 0.8f;
+        public bool  hapt  = true;
+        public string lang = "en";
     }
 }
 

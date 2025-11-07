@@ -2,13 +2,20 @@ using System;
 
 namespace hp55games.Mobile.Core.UI
 {
-    public interface IOptionsService {
-        float MusicVolume { get; set; }
-        float SfxVolume { get; set; }
-        bool  Haptics    { get; set; }
+    public interface IUIOptionsService
+    {
+        // Stato
+        float MusicVolume { get; set; }   // 0..1
+        float SfxVolume   { get; set; }   // 0..1
+        bool  Haptics     { get; set; }
+        string Language   { get; set; }   // "en", "it", ...
+
+        // Notifica quando QUALSIASI opzione cambia
         event Action Changed;
-        void Load();  void Save();
+
+        // Lifecycle
+        void Load();
+        void Save();
+        void ResetToDefaults();
     }
 }
-
-

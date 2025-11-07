@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using hp55games.Mobile.Core.Architecture.States;
+using hp55games.Mobile.Core.UI;
 
 namespace hp55games.Mobile.Core.Architecture
 {
@@ -15,8 +16,8 @@ namespace hp55games.Mobile.Core.Architecture
             Register<IConfigService>(new ConfigService());
             Register<ISaveService>(new SaveService());
             Register<IContentLoader>(new AddressablesContentLoader());
-            Register<IUIService>(new UIService());
             Register<IGameStateMachine>(new GameStateMachine());
+            Register<IUIOptionsService>(new UIOptionsService());
         }
 
 

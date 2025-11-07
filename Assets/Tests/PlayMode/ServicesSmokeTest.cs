@@ -1,5 +1,6 @@
 using UnityEngine;
 using hp55games.Mobile.Core.Architecture;
+using hp55games.Mobile.Core.UI;
 
 namespace hp55games.Mobile.Core.Bootstrap
 {
@@ -29,8 +30,8 @@ namespace hp55games.Mobile.Core.Bootstrap
             sub.Dispose();
 
             // UI
-            var ui = ServiceRegistry.Resolve<IUIService>();
-            ui.Toast("UIService ok");
+            var ui = ServiceRegistry.Resolve<IUIToastService>();
+            ui.ShowAsync("UIService ok");
         }
     }
 
