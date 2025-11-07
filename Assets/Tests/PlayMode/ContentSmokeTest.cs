@@ -17,7 +17,7 @@ public class ContentSmokeTest : MonoBehaviour
 
         // 2) Instanzia direttamente via Addressables (niente Instantiate+SetParent manuale)
         var loader = ServiceRegistry.Resolve<IContentLoader>();
-        var popup = await loader.InstantiateAsync(hp55games.Addr.Content.UI.Popup_Generic, canvas.transform);
+        var popup = await loader.InstantiateAsync(hp55games.Addr.Content.UI.Popups.Popup_Generic, canvas.transform);
 
         Debug.Log("[ContentSmokeTest] Popup instanziato via Addressables.InstantiateAsync");
 

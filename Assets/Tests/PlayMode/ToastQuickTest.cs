@@ -2,14 +2,12 @@ using System.Threading.Tasks;
 using UnityEngine;
 using hp55games.Mobile.Core.Architecture;
 using hp55games.Mobile.Core.UI;
-using hp55games.Ui;
 
-public class PopupServiceTest2 : MonoBehaviour
+public class ToastQuickTest : MonoBehaviour
 {
     private async void Start()
     {
-        // 1) Attendi che l'installer UI abbia registrato il servizio
-        IUIPopupService asd = null;
+        IUIToastService asd = null;
         for (int i = 0; i < 300 && asd == null; i++) // ~5s @60fps
         {
             if (ServiceRegistry.TryResolve(out asd))
@@ -18,7 +16,7 @@ public class PopupServiceTest2 : MonoBehaviour
         }
         if (asd == null)
         {
-            Debug.LogError("UIPopupService non disponibile (91_UI_Root non ancora caricata?).");
+            Debug.LogError("IUIToastService non disponibile (91_UI_Root non ancora caricata?).");
             return;
         }
 
@@ -35,19 +33,9 @@ public class PopupServiceTest2 : MonoBehaviour
             return;
         }
         
-        // attesa breve per dare tempo a 91_UI_Root di registrare i servizi
         await Task.Yield();
-
-        var svc = ServiceRegistry.Resolve<IUIPopupService>();
-
-        // 👇 ora ottieni direttamente il componente
-        var popup = await svc.OpenAsync<UIPopup_Generic>(hp55games.Addr.Content.UI.Popups.Popup_Generic);
-        if (popup != null)
-        {
-            // esempio: setta un testo o collega un bottone
-            // popup.SetMessage("Hello!");
-            await Task.Delay(5200);
-            svc.Close(popup.gameObject);
-        }
+        var toast = ServiceRegistry.Resolve<IUIToastService>();
+        await toast.ShowAsync("Hello from Toast!", 1.8f);
+        await toast.ShowAsync("Secondo toast in coda", 1.5f);
     }
 }

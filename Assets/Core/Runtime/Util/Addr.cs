@@ -15,13 +15,22 @@ namespace hp55games
         {
             public static class UI
             {
-                public const string Popup_Generic = "content/ui/popup_generic";
+                public static class Popups
+                {
+                    public const string Popup_Generic = "content/ui/popup_generic";
+                }
                 
                 public static class Overlays
                 {
                     public const string FadeFull    = "content/ui/overlays/overlay_fade_full";
                     public const string LoadingFull = "content/ui/overlays/overlay_loading_full";
                 }
+
+                public static class Toasts
+                {
+                    public const string Default = "content/ui/toasts/toast_generic";
+                }
+
             }
 
             // Esempi futuri:
