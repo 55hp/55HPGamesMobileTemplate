@@ -32,6 +32,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d2ae786a0085ea5438a8c54b1355d322
+    m_Address: content/ui/pages/options
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: ece7298c47cd7ef478d4b42a032c0b58
     m_Address: content/ui/overlays/overlay_fade_full
     m_ReadOnly: 0

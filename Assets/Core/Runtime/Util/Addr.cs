@@ -20,6 +20,11 @@ namespace hp55games
                     public const string Popup_Generic = "content/ui/popup_generic";
                 }
                 
+                public static class Pages
+                {
+                    public const string Options_Page = "content/ui/pages/options";
+                }
+                
                 public static class Overlays
                 {
                     public const string FadeFull    = "content/ui/overlays/overlay_fade_full";
