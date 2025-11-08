@@ -22,6 +22,8 @@ namespace hp55games.Mobile.Core.SaveService
         public float sfx   = 0.8f;
         public bool  hapt  = true;
         public string lang = "en";
+        public bool  musicMute = false;
+        public bool  sfxMute   = false;
     }
 }
 

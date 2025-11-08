@@ -21,7 +21,9 @@ namespace hp55games.Mobile.UI
         [Header("Optional")]
         [SerializeField] private Button applyButton;   // Se nullo, salva on-change
         [SerializeField] private Button resetButton;   // Ripristina default
-
+        [SerializeField] private Toggle musicMuteToggle;
+        [SerializeField] private Toggle sfxMuteToggle;
+        
         private IUIOptionsService _opt;
 
         void Awake()
@@ -40,6 +42,8 @@ namespace hp55games.Mobile.UI
                 if (sfxSlider)     sfxSlider.onValueChanged.AddListener(_ => ApplyFromUI());
                 if (hapticsToggle) hapticsToggle.onValueChanged.AddListener(_ => ApplyFromUI());
                 if (languageDropdown) languageDropdown.onValueChanged.AddListener(_ => ApplyFromUI());
+                if (musicMuteToggle) musicMuteToggle.onValueChanged.AddListener(_ => ApplyFromUI());
+                if (sfxMuteToggle)   sfxMuteToggle.onValueChanged.AddListener(_ => ApplyFromUI());
             }
 
             if (resetButton) resetButton.onClick.AddListener(() =>
@@ -66,7 +70,9 @@ namespace hp55games.Mobile.UI
             if (musicSlider)   musicSlider.SetValueWithoutNotify(_opt.MusicVolume);
             if (sfxSlider)     sfxSlider.SetValueWithoutNotify(_opt.SfxVolume);
             if (hapticsToggle) hapticsToggle.SetIsOnWithoutNotify(_opt.Haptics);
-
+            if (musicMuteToggle) musicMuteToggle.SetIsOnWithoutNotify(_opt.MusicMute);
+            if (sfxMuteToggle)   sfxMuteToggle.SetIsOnWithoutNotify(_opt.SfxMute);
+            
             if (languageDropdown)
             {
                 var lang = _opt.Language ?? "en";
@@ -81,6 +87,8 @@ namespace hp55games.Mobile.UI
             if (musicSlider)   _opt.MusicVolume = musicSlider.value;
             if (sfxSlider)     _opt.SfxVolume   = sfxSlider.value;
             if (hapticsToggle) _opt.Haptics     = hapticsToggle.isOn;
+            if (musicMuteToggle) _opt.MusicMute = musicMuteToggle.isOn;
+            if (sfxMuteToggle)   _opt.SfxMute   = sfxMuteToggle.isOn;
 
             if (languageDropdown)
             {

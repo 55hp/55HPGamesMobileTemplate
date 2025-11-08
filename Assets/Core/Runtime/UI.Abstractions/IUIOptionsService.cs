@@ -9,8 +9,9 @@ namespace hp55games.Mobile.Core.UI
         float SfxVolume   { get; set; }   // 0..1
         bool  Haptics     { get; set; }
         string Language   { get; set; }   // "en", "it", ...
-
-        // Notifica quando QUALSIASI opzione cambia
+        bool  MusicMute   { get; set; }
+        bool  SfxMute     { get; set; }
+        
         event Action Changed;
 
         // Lifecycle
