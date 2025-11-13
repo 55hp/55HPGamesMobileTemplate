@@ -1,14 +1,14 @@
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 using hp55games.Mobile.Core.Architecture;
 using hp55games.Mobile.Core.UI;
-using TMPro;
 
 namespace hp55games.Mobile.UI
 {
     /// <summary>
     /// Pannello Opzioni: collega slider/toggle/dropdown al servizio centrale.
-    /// Chiama opt.Load() all'avvio, salva su cambi.
+    /// Se c'è un applyButton, salva solo su click; altrimenti salva on-change.
     /// </summary>
     public sealed class UIOptionsPage : MonoBehaviour
     {
@@ -23,35 +23,39 @@ namespace hp55games.Mobile.UI
         [SerializeField] private Button resetButton;   // Ripristina default
         [SerializeField] private Toggle musicMuteToggle;
         [SerializeField] private Toggle sfxMuteToggle;
-        
+
         private IUIOptionsService _opt;
+        private bool _isApplying;
 
         void Awake()
         {
             _opt = ServiceRegistry.Resolve<IUIOptionsService>();
             _opt.Load(); // assicura stato pronto
 
-            // wire UI -> model
+            // wiring UI -> model
             if (applyButton != null)
             {
                 applyButton.onClick.AddListener(ApplyFromUI);
             }
             else
             {
-                if (musicSlider)   musicSlider.onValueChanged.AddListener(_ => ApplyFromUI());
-                if (sfxSlider)     sfxSlider.onValueChanged.AddListener(_ => ApplyFromUI());
-                if (hapticsToggle) hapticsToggle.onValueChanged.AddListener(_ => ApplyFromUI());
+                if (musicSlider)      musicSlider.onValueChanged.AddListener(_ => ApplyFromUI());
+                if (sfxSlider)        sfxSlider.onValueChanged.AddListener(_ => ApplyFromUI());
+                if (hapticsToggle)    hapticsToggle.onValueChanged.AddListener(_ => ApplyFromUI());
                 if (languageDropdown) languageDropdown.onValueChanged.AddListener(_ => ApplyFromUI());
-                if (musicMuteToggle) musicMuteToggle.onValueChanged.AddListener(_ => ApplyFromUI());
-                if (sfxMuteToggle)   sfxMuteToggle.onValueChanged.AddListener(_ => ApplyFromUI());
+                if (musicMuteToggle)  musicMuteToggle.onValueChanged.AddListener(_ => ApplyFromUI());
+                if (sfxMuteToggle)    sfxMuteToggle.onValueChanged.AddListener(_ => ApplyFromUI());
             }
 
-            if (resetButton) resetButton.onClick.AddListener(() =>
+            if (resetButton)
             {
-                _opt.ResetToDefaults();
-                _opt.Save();
-                RefreshUIFromModel();
-            });
+                resetButton.onClick.AddListener(() =>
+                {
+                    _opt.ResetToDefaults();
+                    _opt.Save();
+                    RefreshUIFromModel();
+                });
+            }
         }
 
         void OnEnable()
@@ -67,12 +71,15 @@ namespace hp55games.Mobile.UI
 
         private void RefreshUIFromModel()
         {
+            if (_isApplying) return; // evita loop mentre stiamo applicando
+
             if (musicSlider)   musicSlider.SetValueWithoutNotify(_opt.MusicVolume);
             if (sfxSlider)     sfxSlider.SetValueWithoutNotify(_opt.SfxVolume);
             if (hapticsToggle) hapticsToggle.SetIsOnWithoutNotify(_opt.Haptics);
+
             if (musicMuteToggle) musicMuteToggle.SetIsOnWithoutNotify(_opt.MusicMute);
             if (sfxMuteToggle)   sfxMuteToggle.SetIsOnWithoutNotify(_opt.SfxMute);
-            
+
             if (languageDropdown)
             {
                 var lang = _opt.Language ?? "en";
@@ -84,19 +91,30 @@ namespace hp55games.Mobile.UI
 
         private void ApplyFromUI()
         {
-            if (musicSlider)   _opt.MusicVolume = musicSlider.value;
-            if (sfxSlider)     _opt.SfxVolume   = sfxSlider.value;
-            if (hapticsToggle) _opt.Haptics     = hapticsToggle.isOn;
-            if (musicMuteToggle) _opt.MusicMute = musicMuteToggle.isOn;
-            if (sfxMuteToggle)   _opt.SfxMute   = sfxMuteToggle.isOn;
-
-            if (languageDropdown)
+            _isApplying = true;
+            try
             {
-                var txt = languageDropdown.options[languageDropdown.value].text;
-                _opt.Language = string.IsNullOrEmpty(txt) ? "en" : txt;
-            }
+                if (musicSlider)   _opt.MusicVolume = musicSlider.value;
+                if (sfxSlider)     _opt.SfxVolume   = sfxSlider.value;
+                if (hapticsToggle) _opt.Haptics     = hapticsToggle.isOn;
 
-            _opt.Save();
+                if (musicMuteToggle) _opt.MusicMute = musicMuteToggle.isOn;
+                if (sfxMuteToggle)   _opt.SfxMute   = sfxMuteToggle.isOn;
+
+                if (languageDropdown)
+                {
+                    var txt = languageDropdown.options[languageDropdown.value].text;
+                    _opt.Language = string.IsNullOrEmpty(txt) ? "en" : txt;
+                }
+
+                _opt.Save();
+                // refresh esplicito dopo il salvataggio
+                RefreshUIFromModel();
+            }
+            finally
+            {
+                _isApplying = false;
+            }
         }
     }
 }
