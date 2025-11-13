@@ -15,6 +15,7 @@ namespace hp55games.Mobile.UI
             ServiceRegistry.Register<IUINavigationService>(new UINavigationService());
             ServiceRegistry.Register<IUIOverlayService>(new UIOverlayService());
             ServiceRegistry.Register<IUIToastService>(new UIToastService());
+            ServiceRegistry.Register<IMusicService>(new UIMusicService());
         }
     }
 }

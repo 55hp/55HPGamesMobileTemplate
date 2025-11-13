@@ -6,6 +6,5 @@ public class OptionsQuickTest : MonoBehaviour
 {
     void Start()
     {
-        
     }
 }

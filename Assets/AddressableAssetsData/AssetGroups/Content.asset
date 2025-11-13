@@ -16,7 +16,17 @@ MonoBehaviour:
   m_Data:
     m_SerializedData: []
   m_GUID: c945e8931ff2cd04fa9ee9b18182fe30
-  m_SerializeEntries: []
+  m_SerializeEntries:
+  - m_GUID: 090bf57e449f21243ab570868e37b2db
+    m_Address: content/audio/bgm/game_theme
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: bcfdad679129c3342a4ef048bd8ce107
+    m_Address: content/audio/bgm/menu_theme
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: d47609f78f9d79048af22e29efe0bf34, type: 2}
   m_SchemaSet:
