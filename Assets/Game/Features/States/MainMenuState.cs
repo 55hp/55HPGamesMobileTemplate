@@ -1,21 +1,57 @@
 using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
-using hp55games.Mobile.Core.Architecture.States;
+using hp55games.Mobile.Core.Architecture;
+using hp55games.Mobile.Core.UI;
 
-public sealed class MainMenuState : IGameState
+namespace hp55games.Mobile.Core.Architecture.States
 {
-    public async Task EnterAsync(CancellationToken ct)
+    public sealed class MainMenuState : IGameState
     {
-        // Esempio dummy async:
-        await Task.Yield();
-        Debug.Log("[MainMenuState] Enter");
-    }
+        private IMusicService _music;
 
-    public async Task ExitAsync(CancellationToken ct)
-    {
-        // Chiudi popup, salva, ecc.
-        await Task.Yield();
-        Debug.Log("[MainMenuState] Exit");
+        public MainMenuState()
+        {
+            // NON risolviamo servizi nel costruttore.
+        }
+
+        public async Task EnterAsync(CancellationToken ct)
+        {
+            Debug.Log("[MainMenuState] Enter");
+
+            // Aspetta che IMusicService venga registrato (fino a ~2 secondi)
+            if (_music == null)
+            {
+                const int maxFrames = 120; // ~2s a 60fps
+                for (int i = 0; i < maxFrames && _music == null && !ct.IsCancellationRequested; i++)
+                {
+                    if (ServiceRegistry.TryResolve<IMusicService>(out _music))
+                        break;
+
+                    // aspetta il frame successivo senza bloccare
+                    await Task.Yield();
+                }
+
+                if (_music == null)
+                {
+                    Debug.LogWarning("[MainMenuState] IMusicService non disponibile dopo il timeout; nessuna musica di menu.");
+                    return;
+                }
+            }
+
+            // Avvia o crossfada il BGM del menu
+            await _music.CrossfadeToAsync(hp55games.Addr.Content.Audio.MenuTheme, 0.5f);
+        }
+
+        public async Task ExitAsync(CancellationToken ct)
+        {
+            Debug.Log("[MainMenuState] Exit");
+
+            // Se vuoi fermare la musica in uscita dal menu, puoi decommentare:
+            // if (_music != null)
+            //     await _music.StopAsync(0.3f);
+
+            await Task.CompletedTask;
+        }
     }
 }

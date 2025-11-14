@@ -38,9 +38,11 @@ namespace hp55games
 
             }
 
-            // Esempi futuri:
-            // public static class Audio { public const string Sfx_Click = "content/audio/sfx_click"; }
-            // public static class Tables { public const string Weapons = "content/weapons/table"; }
+            public static class Audio
+            {
+                public const string MenuTheme = "content/audio/bgm/menu_theme";
+                public const string GameTheme = "content/audio/bgm/game_theme";
+            }
         }
     }
 }

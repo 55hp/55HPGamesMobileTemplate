@@ -35,11 +35,9 @@ namespace hp55games.Mobile.Core.Bootstrap
             await SceneManager.LoadSceneAsync("01_Menu", LoadSceneMode.Single);
             //    (Assicurati che "01_Menu" sia in Build Settings)
 
-            // 3) Carica i sistemi condivisi come additive
-            await SceneManager.LoadSceneAsync("Scenes/Additive/91_UI_Root", LoadSceneMode.Additive);
             await SceneManager.LoadSceneAsync("Scenes/Additive/90_Systems_Audio", LoadSceneMode.Additive);
+            await SceneManager.LoadSceneAsync("Scenes/Additive/91_UI_Root", LoadSceneMode.Additive);
 
-            // 4) NIENTE cambio di stato qui: lo fa l'InitialStateInstaller dentro 01_Menu
         }
     }
 }
