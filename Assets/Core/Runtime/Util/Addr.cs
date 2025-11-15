@@ -22,6 +22,7 @@ namespace hp55games
                 
                 public static class Pages
                 {
+                    public const string Main_Menu_Generic = "content/ui/pages/main_menu_generic";
                     public const string Options_Page = "content/ui/pages/options";
                 }
                 
