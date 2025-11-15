@@ -40,7 +40,7 @@ namespace hp55games.Mobile.Core.Architecture.States
             }
 
             // Avvia o crossfada il BGM del menu
-            await _music.CrossfadeToAsync(hp55games.Addr.Content.Audio.MenuTheme, 0.5f);
+            await _music.CrossfadeToAsync(hp55games.Addr.Content.Audio.Bgm.MenuTheme, 0.5f);
         }
 
         public async Task ExitAsync(CancellationToken ct)

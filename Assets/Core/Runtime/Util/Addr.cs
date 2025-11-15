@@ -40,8 +40,12 @@ namespace hp55games
 
             public static class Audio
             {
-                public const string MenuTheme = "content/audio/bgm/menu_theme";
-                public const string GameTheme = "content/audio/bgm/game_theme";
+                public static class Bgm
+                {
+                    public const string MenuTheme = "content/audio/bgm/menu_theme";
+                    public const string GameTheme = "content/audio/bgm/game_theme";
+                }
+                
             }
         }
     }
