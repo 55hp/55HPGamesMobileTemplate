@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using hp55games.Mobile.Core.Architecture.States;
+using hp55games.Mobile.Core.Pooling;
 using hp55games.Mobile.Core.UI;
 
 namespace hp55games.Mobile.Core.Architecture
@@ -18,6 +19,7 @@ namespace hp55games.Mobile.Core.Architecture
             Register<IContentLoader>(new AddressablesContentLoader());
             Register<IGameStateMachine>(new GameStateMachine());
             Register<IUIOptionsService>(new UIOptionsService());
+            Register<IObjectPoolService>(new ObjectPoolService());
         }
 
 
