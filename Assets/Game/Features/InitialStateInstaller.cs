@@ -1,38 +1,19 @@
 using System.Threading.Tasks;
 using UnityEngine;
+using hp55games.Mobile.Core.Architecture;
 using hp55games.Mobile.Core.Architecture.States;
 
-public sealed class InitialStateInstaller : MonoBehaviour
+public class InitialStateInstaller : MonoBehaviour
 {
-    [SerializeField] private bool setOnAwake = false;
-
-    private void Awake()
-    {
-        if (setOnAwake)
-            SetInitialStateAsync().Forget();
-    }
-
+    /// <summary>
+    /// Avvia lo stato iniziale (MainMenuState) una volta che la scena 01_Menu è attiva.
+    /// </summary>
     private async void Start()
     {
-        if (!setOnAwake)
-            await SetInitialStateAsync();
-    }
+        // Risolvi la FSM dai servizi core
+        var fsm = ServiceRegistry.Resolve<IGameStateMachine>();
 
-    private async Task SetInitialStateAsync()
-    {
-        // Qui puoi scegliere lo stato iniziale del tuo gioco (Game layer)
-        await hp55games.Mobile.Core.Architecture.ServiceRegistry
-            .Resolve<hp55games.Mobile.Core.Architecture.States.IGameStateMachine>()
-            .ChangeStateAsync(new MainMenuState());
-
-    }
-}
-
-// Helper locale per “fire-and-forget” con log minimale (evita dipendenze dal Core)
-static class TaskExt
-{
-    public static async void Forget(this Task task)
-    {
-        try { await task; } catch (System.Exception e) { Debug.LogException(e); }
+        // Passa allo stato di Main Menu
+        await fsm.ChangeStateAsync(new MainMenuState());
     }
 }

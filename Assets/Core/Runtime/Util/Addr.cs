@@ -23,6 +23,7 @@ namespace hp55games
                 public static class Pages
                 {
                     public const string Options_Page = "content/ui/pages/options";
+                    public const string Main_Menu_Page = "content/ui/pages/main_menu";
                 }
                 
                 public static class Overlays

@@ -6,52 +6,52 @@ using hp55games.Mobile.Core.UI;
 
 namespace hp55games.Mobile.Core.Architecture.States
 {
+    /// <summary>
+    /// Entry state for the template: shows the generic main menu page
+    /// and starts the menu BGM.
+    /// </summary>
     public sealed class MainMenuState : IGameState
     {
-        private IMusicService _music;
+        private readonly IUINavigationService _nav;
+        private readonly IMusicService _music;
 
         public MainMenuState()
         {
-            // NON risolviamo servizi nel costruttore.
+            if (!ServiceRegistry.TryResolve<IUINavigationService>(out _nav))
+            {
+                Debug.LogError("[MainMenuState] IUINavigationService not registered. " +
+                               "Check that 91_UI_Root + UIServiceInstaller are loaded before starting the FSM.");
+            }
+
+            // music is optional, non facciamo crashare lo stato se manca
+            ServiceRegistry.TryResolve<IMusicService>(out _music);
         }
 
         public async Task EnterAsync(CancellationToken ct)
         {
             Debug.Log("[MainMenuState] Enter");
 
-            // Aspetta che IMusicService venga registrato (fino a ~2 secondi)
-            if (_music == null)
+            // 1) Mostra la pagina di main menu (Addressable prefab)
+            if (_nav != null)
             {
-                const int maxFrames = 120; // ~2s a 60fps
-                for (int i = 0; i < maxFrames && _music == null && !ct.IsCancellationRequested; i++)
-                {
-                    if (ServiceRegistry.TryResolve<IMusicService>(out _music))
-                        break;
-
-                    // aspetta il frame successivo senza bloccare
-                    await Task.Yield();
-                }
-
-                if (_music == null)
-                {
-                    Debug.LogWarning("[MainMenuState] IMusicService non disponibile dopo il timeout; nessuna musica di menu.");
-                    return;
-                }
+                await _nav.PushAsync(global::hp55games.Addr.Content.UI.Pages.Main_Menu_Page);
             }
 
-            // Avvia o crossfada il BGM del menu
-            await _music.CrossfadeToAsync(hp55games.Addr.Content.Audio.Bgm.MenuTheme, 0.5f);
+            // 2) Musica di menu, se il servizio è disponibile
+            if (_music != null)
+            {
+                // Se il path non è questo, cambia solo la costante qui
+                await _music.CrossfadeToAsync(
+                    global::hp55games.Addr.Content.Audio.Bgm.MenuTheme,
+                    0.5f
+                );
+            }
         }
 
-        public async Task ExitAsync(CancellationToken ct)
+        public Task ExitAsync(CancellationToken ct)
         {
-            Debug.Log("[MainMenuState] Exit");
-
-            // Se vuoi fermare la musica in uscita dal menu, puoi decommentare:
-            // if (_music != null)
-            //     await _music.StopAsync(0.3f);
-
-            await Task.CompletedTask;
+            // Se vuoi, qui potresti fare pop della page o fermare la musica
+            return Task.CompletedTask;
         }
     }
 }
