@@ -38,7 +38,7 @@ MonoBehaviour:
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: e6742ea5b310d7e45bafa9c9306777ab
-    m_Address: content/ui/pages/main_menu_generic
+    m_Address: content/ui/pages/main_menu
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
