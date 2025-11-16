@@ -17,12 +17,7 @@ namespace hp55games.Mobile.UI
             ServiceRegistry.Register<IUINavigationService>(new UINavigationService());
             ServiceRegistry.Register<IUIOverlayService>(new UIOverlayService());
             ServiceRegistry.Register<IUIToastService>(new UIToastService());
-
-            // Audio / music service (già creato come UIMusicService)
             ServiceRegistry.Register<IMusicService>(new UIMusicService());
-
-            // Se hai IUIOptionsService e UIOptionsService, registra anche questo qui:
-            ServiceRegistry.Register<IUIOptionsService>(new UIOptionsService());
 
             UIRuntime.MarkServicesReady();
         }

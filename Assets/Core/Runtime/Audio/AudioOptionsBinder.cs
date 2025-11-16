@@ -19,7 +19,13 @@ namespace hp55games.Mobile.Core.Audio
 
         private void Awake()
         {
-            _opt = ServiceRegistry.Resolve<IUIOptionsService>();
+            if (!ServiceRegistry.TryResolve<IUIOptionsService>(out _opt))
+            {
+                Debug.LogError("[AudioOptionsBinder] IUIOptionsService non registrato. Controlla ServiceRegistry.InstallDefaults().");
+                enabled = false;
+                return;
+            }
+
             _opt.Load(); // assicura stato pronto
             _opt.Changed += ApplyAll;
             ApplyAll();

@@ -19,6 +19,7 @@ namespace hp55games.Mobile.Core.Architecture
             Register<IContentLoader>(new AddressablesContentLoader());
             Register<IGameStateMachine>(new GameStateMachine());
             Register<IObjectPoolService>(new ObjectPoolService());
+            Register<IUIOptionsService>(new UIOptionsService());
         }
 
 
