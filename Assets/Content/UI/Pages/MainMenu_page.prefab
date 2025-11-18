@@ -92,7 +92,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 18
+  m_fontSize: 100
   m_fontSizeBase: 24
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -147,7 +147,7 @@ GameObject:
   - component: {fileID: 5053193994121896025}
   - component: {fileID: 4390274861153177257}
   m_Layer: 5
-  m_Name: Button
+  m_Name: Button (PLAY)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -347,7 +347,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 18
+  m_fontSize: 100
   m_fontSizeBase: 24
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -536,7 +536,7 @@ GameObject:
   - component: {fileID: 4591272246189262187}
   - component: {fileID: 5303602280064287943}
   m_Layer: 5
-  m_Name: Button (2)
+  m_Name: Button (CREDITS)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -657,7 +657,7 @@ GameObject:
   - component: {fileID: 1127575402872992299}
   - component: {fileID: 2557269826629425576}
   m_Layer: 5
-  m_Name: Button (3)
+  m_Name: Button (EXIT)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -776,6 +776,8 @@ GameObject:
   - component: {fileID: 1891047587193177769}
   - component: {fileID: 2433466451420882159}
   - component: {fileID: 6439333126904752592}
+  - component: {fileID: 7866592818065030373}
+  - component: {fileID: 3735918765278994666}
   m_Layer: 5
   m_Name: MainMenu_page
   m_TagString: Untagged
@@ -842,6 +844,35 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &7866592818065030373
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5719815395055136839}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6112b2b734fbec9458f92bc6d44b2dbc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  titleLabel: {fileID: 5010052286221913336}
+  playButton: {fileID: 4390274861153177257}
+  optionsButton: {fileID: 5634042129638252495}
+  creditsButton: {fileID: 5303602280064287943}
+  exitButton: {fileID: 2557269826629425576}
+--- !u!225 &3735918765278994666
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5719815395055136839}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &5850675964696347317
 GameObject:
   m_ObjectHideFlags: 0
@@ -1000,7 +1031,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 18
+  m_fontSize: 100
   m_fontSizeBase: 24
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -1055,7 +1086,7 @@ GameObject:
   - component: {fileID: 3198604484178832844}
   - component: {fileID: 5634042129638252495}
   m_Layer: 5
-  m_Name: Button (1)
+  m_Name: Button (OPTIONS)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1255,7 +1286,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 18
+  m_fontSize: 100
   m_fontSizeBase: 24
   m_fontWeight: 400
   m_enableAutoSizing: 1

@@ -1,4 +1,4 @@
-using System.Threading.Tasks;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using hp55games.Mobile.Core.Architecture;
@@ -22,21 +22,27 @@ namespace hp55games.Mobile.Core.Bootstrap
             QualitySettings.vSyncCount = 0;
         }
 
-        private async void Awake()
+        private void Awake()
         {
             DontDestroyOnLoad(gameObject);
 
+            // Avvia la sequenza di bootstrap come coroutine
+            StartCoroutine(BootstrapSequence());
+        }
+
+        private IEnumerator BootstrapSequence()
+        {
             // 1) Servizi core (IGameStateMachine compreso)
             ServiceRegistry.InstallDefaults();
 
             // 2) Systems Audio
-            await LoadSceneAdditiveAsync("Scenes/Additive/90_Systems_Audio");
+            yield return LoadSceneAdditiveCoroutine("Scenes/Additive/90_Systems_Audio");
 
             // 3) UI Root
-            await LoadSceneAdditiveAsync("Scenes/Additive/91_UI_Root");
+            yield return LoadSceneAdditiveCoroutine("Scenes/Additive/91_UI_Root");
 
             // 4) Scena di menu
-            await LoadSceneAdditiveAsync("Scenes/01_Menu");
+            yield return LoadSceneAdditiveCoroutine("Scenes/01_Menu");
 
             // Imposta 01_Menu come Active Scene
             var menuScene = SceneManager.GetSceneByPath("Scenes/01_Menu");
@@ -44,21 +50,21 @@ namespace hp55games.Mobile.Core.Bootstrap
                 SceneManager.SetActiveScene(menuScene);
         }
 
-        private static async Task LoadSceneAdditiveAsync(string scenePath)
+        private static IEnumerator LoadSceneAdditiveCoroutine(string scenePath)
         {
             if (SceneManager.GetSceneByPath(scenePath).isLoaded)
-                return;
+                yield break;
 
             var op = SceneManager.LoadSceneAsync(scenePath, LoadSceneMode.Additive);
             if (op == null)
             {
                 Debug.LogError("[GameBootstrap] Failed to load scene: " + scenePath);
-                return;
+                yield break;
             }
 
             while (!op.isDone)
             {
-                await Task.Yield();
+                yield return null;
             }
         }
     }

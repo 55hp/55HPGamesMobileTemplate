@@ -17,7 +17,7 @@ namespace hp55games.Mobile.UI
         private readonly Stack<PageEntry> _stack = new();
         private RectTransform _pagesRoot;
 
-        private const float FadeDuration = 0.15f;
+        private const float FadeDuration = 0.25f;
 
         public UINavigationService()
         {
@@ -48,6 +48,11 @@ namespace hp55games.Mobile.UI
             }
 
             go.SetActive(true);
+
+            var cg = RequireCanvasGroup(go);
+            cg.alpha = 0f;
+            cg.blocksRaycasts = false;
+
             await FadeIn(go);
 
             _stack.Push(entry);
@@ -73,6 +78,11 @@ namespace hp55games.Mobile.UI
             {
                 var prev = _stack.Peek();
                 prev.GameObject.SetActive(true);
+
+                var cg = RequireCanvasGroup(prev.GameObject);
+                cg.alpha = 0f;
+                cg.blocksRaycasts = false;
+
                 await FadeIn(prev.GameObject);
             }
         }
@@ -107,8 +117,10 @@ namespace hp55games.Mobile.UI
         private static async Task FadeIn(GameObject go)
         {
             var cg = RequireCanvasGroup(go);
-            cg.interactable = false;
-            cg.blocksRaycasts = false;
+
+            // NON tocchiamo più 'interactable' qui, così i Button/Slider non sembrano disabilitati.
+            cg.blocksRaycasts = false; // niente click durante il fade
+            cg.alpha = 0f;
 
             float t = 0f;
             while (t < FadeDuration)
@@ -117,15 +129,16 @@ namespace hp55games.Mobile.UI
                 cg.alpha = Mathf.Clamp01(t / FadeDuration);
                 await Task.Yield();
             }
+
             cg.alpha = 1f;
-            cg.interactable = true;
-            cg.blocksRaycasts = true;
+            cg.blocksRaycasts = true; // ora i click tornano normali
         }
 
         private static async Task FadeOut(GameObject go)
         {
             var cg = RequireCanvasGroup(go);
-            cg.interactable = false;
+
+            // Anche qui: non tocchiamo 'interactable', solo raycasts.
             cg.blocksRaycasts = false;
 
             float t = 0f;
@@ -136,7 +149,9 @@ namespace hp55games.Mobile.UI
                 cg.alpha = Mathf.Lerp(start, 0f, t / FadeDuration);
                 await Task.Yield();
             }
+
             cg.alpha = 0f;
+            // blocksRaycasts può rimanere false, tanto la page sta per essere nascosta/distrutta.
         }
 
         private readonly struct PageEntry

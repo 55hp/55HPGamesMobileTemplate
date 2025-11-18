@@ -17,7 +17,8 @@ namespace hp55games.Mobile.UI
         [SerializeField] private Slider sfxSlider;     // 0..1
         [SerializeField] private Toggle hapticsToggle;
         [SerializeField] private TMP_Dropdown languageDropdown; // valori: "en","it",...
-
+        [SerializeField] private Button backButton;
+        
         [Header("Optional")]
         [SerializeField] private Button applyButton;   // Se nullo, salva on-change
         [SerializeField] private Button resetButton;   // Ripristina default
@@ -25,12 +26,18 @@ namespace hp55games.Mobile.UI
         [SerializeField] private Toggle sfxMuteToggle;
 
         private IUIOptionsService _opt;
+        private IUINavigationService _navigation;
         private bool _isApplying;
 
         void Awake()
         {
             _opt = ServiceRegistry.Resolve<IUIOptionsService>();
             _opt.Load(); // assicura stato pronto
+            
+            if (!ServiceRegistry.TryResolve<IUINavigationService>(out _navigation))
+            {
+                Debug.LogWarning("[UIOptionsPage] IUINavigationService not available. Back button will do nothing.");
+            }
 
             // wiring UI -> model
             if (applyButton != null)
@@ -55,6 +62,11 @@ namespace hp55games.Mobile.UI
                     _opt.Save();
                     RefreshUIFromModel();
                 });
+            }
+            
+            if (backButton != null)
+            {
+                backButton.onClick.AddListener(OnBackClicked);
             }
         }
 
@@ -115,6 +127,17 @@ namespace hp55games.Mobile.UI
             {
                 _isApplying = false;
             }
+        }
+        
+        private async void OnBackClicked()
+        {
+            if (_navigation == null)
+            {
+                Debug.LogWarning("[UIOptionsPage] Back clicked but IUINavigationService is null.");
+                return;
+            }
+
+            await _navigation.PopAsync();
         }
     }
 }

@@ -1,5 +1,3 @@
-// Assets/Core/Runtime/Save/SaveService.cs
-
 using System;
 using System.IO;
 using UnityEngine;
