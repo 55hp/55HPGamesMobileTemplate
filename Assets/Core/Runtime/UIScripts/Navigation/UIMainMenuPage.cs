@@ -68,7 +68,13 @@ namespace hp55games.Mobile.Game.UI
                 return;
             }
 
-            // Go to gameplay using the high-level scene flow.
+            // 1) Chiudi la pagina del menu se hai un navigation service
+            if (_navigation != null)
+            {
+                await _navigation.PopAsync();
+            }
+
+            // 2) Vai al gameplay (scene + state via SceneFlowService)
             await _sceneFlow.GoToGameplayAsync();
         }
 
