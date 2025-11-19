@@ -1,0 +1,9 @@
+key	en	it	ja
+ui.main.play	Play	Gioca	プレイ
+ui.main.options	Options	Opzioni	オプション
+ui.main.credits	Credits	Crediti	クレジット
+ui.main.exit	Exit	Esci	終了
+ui.options.title	Options	Opzioni	オプション
+ui.options.music	Music Volume	Volume Musica	BGM音量
+ui.options.sfx	SFX Volume	Volume Effetti	効果音音量
+ui.tutorial.skip	Skip	Salta	スキップ

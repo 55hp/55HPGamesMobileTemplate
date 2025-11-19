@@ -97,6 +97,9 @@ namespace hp55games.Mobile.Game.UI
 
         private async void OnCreditsClicked()
         {
+            ServiceRegistry.Resolve<hp55games.Mobile.Core.Localization.ILocalizationService>()
+                .SetLanguage("it");
+            
             if (_navigation == null)
             {
                 Debug.LogWarning("[UIMainMenuPage] Credits clicked but IUINavigationService is null.");
@@ -108,7 +111,7 @@ namespace hp55games.Mobile.Game.UI
                 Debug.LogWarning("[UIMainMenuPage] Credits clicked but creditsPageAddress is empty.");
                 return;
             }
-
+            
             await _navigation.PushAsync(creditsPageAddress);
         }
 
