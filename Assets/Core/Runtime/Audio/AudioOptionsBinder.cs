@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.Audio;
 using hp55games.Mobile.Core.Architecture;
@@ -28,6 +29,10 @@ namespace hp55games.Mobile.Core.Audio
 
             _opt.Load(); // assicura stato pronto
             _opt.Changed += ApplyAll;
+        }
+
+        private void Start()
+        {
             ApplyAll();
         }
 
