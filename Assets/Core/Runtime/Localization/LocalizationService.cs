@@ -99,6 +99,11 @@ namespace hp55games.Mobile.Core.Localization
 
             Debug.Log($"[LocalizationService] Loaded localization for languages: {string.Join(", ", languages)}");
         }
+        
+        public IReadOnlyList<string> GetAvailableLanguages()
+        {
+            return new List<string>(_tables.Keys);
+        }
 
         public void SetLanguage(string languageCode)
         {

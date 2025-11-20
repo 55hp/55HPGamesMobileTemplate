@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 
 namespace hp55games.Mobile.Core.Localization
@@ -11,6 +12,8 @@ namespace hp55games.Mobile.Core.Localization
 
         string Get(string key);
         string Get(string key, params object[] args);
+
+        public IReadOnlyList<string> GetAvailableLanguages();
 
         event Action LanguageChanged;
     }

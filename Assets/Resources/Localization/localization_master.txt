@@ -1,9 +1,58 @@
-key	en	it	ja
-ui.main.play	Play	Gioca	プレイ
-ui.main.options	Options	Opzioni	オプション
-ui.main.credits	Credits	Crediti	クレジット
-ui.main.exit	Exit	Esci	終了
-ui.options.title	Options	Opzioni	オプション
-ui.options.music	Music Volume	Volume Musica	BGM音量
-ui.options.sfx	SFX Volume	Volume Effetti	効果音音量
-ui.tutorial.skip	Skip	Salta	スキップ
+key	en	it	es	fr	de	ja
+ui.main.play	Play	Gioca	Jugar	Jouer	Spielen	プレイ
+ui.main.options	Options	Opzioni	Opciones	Options	Optionen	オプション
+ui.main.credits	Credits	Crediti	Créditos	Crédits	Kredite	クレジット
+ui.main.exit	Exit	Esci	Salir	Quitter	Beenden	終了
+ui.main.start	New Game	Nuova Partita	Nueva Partida	Nouvelle Partie	Neues Spiel	新しいゲーム
+ui.main.continue	Continue	Continua	Continuar	Continuer	Fortsetzen	続ける
+
+ui.pause.title	Pause	PAUSA	Pausa	Pause	Pause	一時停止
+ui.pause.resume	Resume	Riprendi	Reanudar	Reprendre	Fortsetzen	再開
+ui.pause.restart	Restart	Ricomincia	Reiniciar	Recommencer	Neu Starten	再スタート
+ui.pause.quit	Quit	Esci	Salir	Quitter	Beenden	終了
+
+ui.options.title	Options	Opzioni	Configuración	Options	Einstellungen	オプション
+ui.options.language	Language	Lingua	Idioma	Langue	Sprache	言語
+ui.options.music	Music Volume	Volume Musica	Volumen Música	Volume Musique	Musiklautstärke	BGM音量
+ui.options.sfx	SFX Volume	Volume Effetti	Volumen SFX	Volume Effets	SFX-Lautstärke	効果音音量
+ui.options.haptics	Haptics	Vibrazione	Hápticos	Haptique	Haptik	振動
+ui.options.apply	Apply	Applica	Aplicar	Appliquer	Übernehmen	適用
+ui.options.reset	Reset	Reimposta	Restablecer	Réinitialiser	Zurücksetzen	リセット
+ui.options.back	Back	Indietro	Atrás	Retour	Zurück	戻る
+
+ui.loading.loading	Loading...	Caricamento...	Cargando...	Chargement...	Lädt...	読み込み中…
+ui.loading.syncing	Syncing...	Sincronizzazione...	Sincronizando...	Synchronisation...	Synchronisiert...	同期中…
+ui.loading.connecting	Connecting...	Connessione...	Conectando...	Connexion...	Verbindung...	接続中…
+
+ui.store.title	Shop	Negozio	Tienda	Boutique	Shop	ショップ
+ui.store.buy	Buy	Compra	Comprar	Acheter	Kaufen	購入
+ui.store.price	Price	Prezzo	Precio	Prix	Preis	価格
+ui.store.not_enough_coins	Not enough coins	Monete insufficienti	No tienes monedas	Pas assez de pièces	Nicht genug Münzen	コインが足りません
+ui.store.purchased	Purchased	Acquistato	Comprado	Acheté	Gekauft	購入済み
+
+ui.ads.watch_ad	Watch Ad	Guarda Ad	Ver anuncio	Regarder pub	Anzeige ansehen	広告を見る
+ui.ads.rewards	Reward	Ricompensa	Recompensa	Récompense	Belohnung	報酬
+ui.ads.claim	Claim	Riscatta	Reclamar	Récupérer	Einlösen	受け取る
+
+ui.results.title	Results	Risultati	Resultados	Résultats	Ergebnisse	結果
+ui.results.retry	Retry	Riprova	Reintentar	Rejouer	Erneut	再挑戦
+ui.results.next	Next	Avanti	Siguiente	Suivant	Weiter	次へ
+ui.results.score	Score	Punteggio	Puntuación	Score	Punktzahl	スコア
+ui.results.highscore	High Score	Record	Puntuación Máxima	Meilleur Score	Bestwert	ハイスコア
+
+ui.error.network_no_connection	No Internet Connection	Nessuna connessione	Ninguna conexión	Pas de connexion	Keine Verbindung	インターネット接続なし
+ui.error.server_down	Server Unavailable	Server non disponibile	Servidor no disponible	Serveur indisponible	Server nicht erreichbar	サーバーに接続できません
+ui.error.unexpected	Error	Errore	Error	Erreur	Fehler	エラー
+
+ui.notifications.daily_reward	Daily Reward Available!	Ricompensa Giornaliera!	¡Recompensa diaria!	Récompense quotidienne!	Tägliche Belohnung!	デイリー報酬！
+ui.notifications.energy_full	Energy Full!	Energia Piena!	¡Energía Llena!	Énergie pleine!	Energie voll!	エネルギー満タン！
+ui.notifications.new_items	New Items!	Nuovi Oggetti!	¡Nuevos objetos!	Nouveaux objets!	Neue Gegenstände!	新しいアイテム！
+
+game.tutorial.welcome	Welcome!	Benvenuto!	¡Bienvenido!	Bienvenue!	Willkommen!	ようこそ！
+game.tutorial.tap_to_continue	Tap to continue	Tocca per continuare	Toca para continuar	Appuyez pour continuer	Weiter tippen	タップで続行
+game.tutorial.move	Move your character	Muovi il personaggio	Mueve tu personaje	Déplace ton personnage	Bewege deinen Charakter	キャラクターを移動する
+
+meta.energy	Energy	Energia	Energía	Énergie	Energie	エネルギー
+meta.coins	Coins	Monete	Monedas	Pièces	Münzen	コイン
+meta.gems	Gems	Gemme	Gemas	Gemmes	Edelsteine	ジェム
+meta.level	Lv	Lv	Nv	Niv	Stufe	レベル

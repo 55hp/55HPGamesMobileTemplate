@@ -1,13 +1,14 @@
 using System;
 using hp55games.Mobile.Core.Architecture;
 using hp55games.Mobile.Core.SaveService;
+using hp55games.Mobile.Core.Localization;
 
 namespace hp55games.Mobile.Core.UI
 {
     /// <summary>
     /// Servizio centrale per le opzioni.
     /// Legge/scrive i dati in SaveService.Data.options.
-    /// Espone eventi per notificare la UI e i binder (es. audio).
+    /// Notifica la UI e i binder (audio, localizzazione) tramite evento Changed.
     /// </summary>
     public sealed class UIOptionsService : IUIOptionsService
     {
@@ -34,7 +35,11 @@ namespace hp55games.Mobile.Core.UI
         public string Language
         {
             get => _lang;
-            set { _lang = string.IsNullOrEmpty(value) ? "en" : value; Changed?.Invoke(); }
+            set
+            {
+                _lang = string.IsNullOrEmpty(value) ? "en" : value;
+                Changed?.Invoke();
+            }
         }
 
         public bool MusicMute
@@ -63,16 +68,17 @@ namespace hp55games.Mobile.Core.UI
             _save = ServiceRegistry.Resolve<ISaveService>();
         }
 
+        /// <summary>
+        /// Sincronizza lo stato interno con SaveService.Data.options
+        /// e aggiorna la lingua nel LocalizationService (se presente).
+        /// NON richiama _save.Load(): il save viene caricato nel bootstrap.
+        /// </summary>
         public void Load()
         {
-            // Carica il save globale
-            _save.Load();
-
-            // Assicura che il blocco options non sia null
+            // Assicura il blocco options
             var opt = _save.Data.options ?? new OptionsData();
             _save.Data.options ??= opt;
 
-            // Legge i valori
             _music     = Clamp01(opt.music);
             _sfx       = Clamp01(opt.sfx);
             _hapt      = opt.hapt;
@@ -80,15 +86,25 @@ namespace hp55games.Mobile.Core.UI
             _musicMute = opt.musicMute;
             _sfxMute   = opt.sfxMute;
 
-            // Fallback config per gli haptics
+            // Fallback per Haptics da Config (se esiste)
             if (ServiceRegistry.TryResolve<IConfigService>(out var cfg) && cfg.Current != null)
             {
                 _hapt = cfg.Current.enableHaptics;
             }
 
+            // Sincronizza anche la lingua del LocalizationService
+            if (ServiceRegistry.TryResolve<ILocalizationService>(out var loc))
+            {
+                loc.SetLanguage(_lang);
+            }
+
             Changed?.Invoke();
         }
 
+        /// <summary>
+        /// Scrive i valori correnti in SaveService.Data.options,
+        /// salva su disco e aggiorna il LocalizationService.
+        /// </summary>
         public void Save()
         {
             var opt = _save.Data.options ?? new OptionsData();
@@ -101,6 +117,12 @@ namespace hp55games.Mobile.Core.UI
 
             _save.Data.options = opt;
             _save.Save();
+
+            // Aggiorna la lingua attiva nel LocalizationService
+            if (ServiceRegistry.TryResolve<ILocalizationService>(out var loc))
+            {
+                loc.SetLanguage(_lang);
+            }
         }
 
         public void ResetToDefaults()

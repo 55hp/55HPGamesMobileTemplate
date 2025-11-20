@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using hp55games.Mobile.Core.Architecture;
+using hp55games.Mobile.Core.Localization;
 using hp55games.Mobile.Core.UI;
 
 namespace hp55games.Mobile.UI
@@ -38,21 +39,9 @@ namespace hp55games.Mobile.UI
             {
                 Debug.LogWarning("[UIOptionsPage] IUINavigationService not available. Back button will do nothing.");
             }
-
-            // wiring UI -> model
-            if (applyButton != null)
-            {
-                applyButton.onClick.AddListener(ApplyFromUI);
-            }
-            else
-            {
-                if (musicSlider)      musicSlider.onValueChanged.AddListener(_ => ApplyFromUI());
-                if (sfxSlider)        sfxSlider.onValueChanged.AddListener(_ => ApplyFromUI());
-                if (hapticsToggle)    hapticsToggle.onValueChanged.AddListener(_ => ApplyFromUI());
-                if (languageDropdown) languageDropdown.onValueChanged.AddListener(_ => ApplyFromUI());
-                if (musicMuteToggle)  musicMuteToggle.onValueChanged.AddListener(_ => ApplyFromUI());
-                if (sfxMuteToggle)    sfxMuteToggle.onValueChanged.AddListener(_ => ApplyFromUI());
-            }
+            
+            PopulateLanguageDropdown();
+            SetupCallbacks();
 
             if (resetButton)
             {
@@ -67,6 +56,23 @@ namespace hp55games.Mobile.UI
             if (backButton != null)
             {
                 backButton.onClick.AddListener(OnBackClicked);
+            }
+        }
+
+        private void SetupCallbacks()
+        {
+            if (applyButton != null)
+            {
+                applyButton.onClick.AddListener(ApplyFromUI);
+            }
+            else
+            {
+                if (musicSlider)      musicSlider.onValueChanged.AddListener(_ => ApplyFromUI());
+                if (sfxSlider)        sfxSlider.onValueChanged.AddListener(_ => ApplyFromUI());
+                if (hapticsToggle)    hapticsToggle.onValueChanged.AddListener(_ => ApplyFromUI());
+                if (languageDropdown) languageDropdown.onValueChanged.AddListener(_ => ApplyFromUI());
+                if (musicMuteToggle)  musicMuteToggle.onValueChanged.AddListener(_ => ApplyFromUI());
+                if (sfxMuteToggle)    sfxMuteToggle.onValueChanged.AddListener(_ => ApplyFromUI());
             }
         }
 
@@ -128,6 +134,25 @@ namespace hp55games.Mobile.UI
                 _isApplying = false;
             }
         }
+        
+        private void PopulateLanguageDropdown()
+        {
+            if (languageDropdown == null) return;
+
+            if (!ServiceRegistry.TryResolve<ILocalizationService>(out var loc))
+            {
+                Debug.LogError("[UIOptionsPage] LocalizationService non trovato.");
+                return;
+            }
+
+            var langs = loc.GetAvailableLanguages();
+
+            languageDropdown.options.Clear();
+
+            foreach (var lang in langs)
+                languageDropdown.options.Add(new TMP_Dropdown.OptionData(lang));
+        }
+
         
         private async void OnBackClicked()
         {
