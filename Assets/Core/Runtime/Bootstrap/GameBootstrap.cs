@@ -26,7 +26,6 @@ namespace hp55games.Mobile.Core.Bootstrap
         {
             DontDestroyOnLoad(gameObject);
 
-            // Avvia la sequenza di bootstrap come coroutine
             StartCoroutine(BootstrapSequence());
         }
 
@@ -34,6 +33,9 @@ namespace hp55games.Mobile.Core.Bootstrap
         {
             // 1) Servizi core (IGameStateMachine compreso)
             ServiceRegistry.InstallDefaults();
+
+            var save = ServiceRegistry.Resolve<ISaveService>();
+            save.Load();
 
             // 2) Systems Audio
             yield return LoadSceneAdditiveCoroutine("Scenes/Additive/90_Systems_Audio");

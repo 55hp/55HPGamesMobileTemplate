@@ -1,58 +1,135 @@
-key	en	it	es	fr	de	ja
-ui.main.play	Play	Gioca	Jugar	Jouer	Spielen	プレイ
-ui.main.options	Options	Opzioni	Opciones	Options	Optionen	オプション
-ui.main.credits	Credits	Crediti	Créditos	Crédits	Kredite	クレジット
-ui.main.exit	Exit	Esci	Salir	Quitter	Beenden	終了
-ui.main.start	New Game	Nuova Partita	Nueva Partida	Nouvelle Partie	Neues Spiel	新しいゲーム
-ui.main.continue	Continue	Continua	Continuar	Continuer	Fortsetzen	続ける
+key	en	it	es	fr	de	ja	ko	zh-Hans	pt-BR
+ui.main.play	Play	Gioca	Jugar	Jouer	Spielen	プレイ	플레이	开始	Play
+ui.main.new_game	New Game	Nuova Partita	Nueva Partida	Nouvelle Partie	Neues Spiel	新しいゲーム	새 게임	新游戏	Novo Jogo
+ui.main.continue	Continue	Continua	Continuar	Continuer	Fortsetzen	続ける	계속하기	继续	Continuar
+ui.main.load_game	Load Game	Carica Partita	Cargar Partida	Charger Partie	Spiel laden	ゲームをロード	게임 불러오기	读取存档	Carregar Jogo
+ui.main.options	Options	Opzioni	Opciones	Options	Optionen	オプション	옵션	选项	Opções
+ui.main.settings	Settings	Impostazioni	Ajustes	Paramètres	Einstellungen	設定	설정	设置	Configurações
+ui.main.credits	Credits	Crediti	Créditos	Crédits	Kredite	クレジット	크레딧	制作人员	Créditos
+ui.main.exit	Exit	Esci	Salir	Quitter	Beenden	終了	종료	退出	Sair
+ui.main.privacy	Privacy Policy	Privacy	Privacidad	Confidentialité	Datenschutz	プライバシーポリシー	개인정보 보호정책	隐私政策	Política de Privacidade
+ui.main.support	Support	Supporto	Soporte	Support	Aus Support	サポート	고객지원	客服	Atendimento
+ui.main.news	News	Notizie	Noticias	Nouvelles	Nachrichten	ニュース	뉴스	新闻	Notícias
 
-ui.pause.title	Pause	PAUSA	Pausa	Pause	Pause	一時停止
-ui.pause.resume	Resume	Riprendi	Reanudar	Reprendre	Fortsetzen	再開
-ui.pause.restart	Restart	Ricomincia	Reiniciar	Recommencer	Neu Starten	再スタート
-ui.pause.quit	Quit	Esci	Salir	Quitter	Beenden	終了
+ui.btn.ok	OK	OK	OK	OK	OK	OK	확인	确定	OK
+ui.btn.cancel	Cancel	Annulla	Cancelar	Annuler	Abbrechen	キャンセル	취소	取消	Cancelar
+ui.btn.yes	Yes	Sì	Sí	Oui	Ja	はい	예	是	Sim
+ui.btn.no	No	No	No	Non	Nein	いいえ	아니요	否	Não
+ui.btn.close	Close	Chiudi	Cerrar	Fermer	Schließen	閉じる	닫기	关闭	Fechar
+ui.btn.back	Back	Indietro	Atrás	Retour	Zurück	戻る	뒤로가기	返回	Voltar
+ui.btn.continue	Continue	Continua	Continuar	Continuer	Fortsetzen	続ける	계속	继续	Continuar
+ui.btn.confirm	Confirm	Conferma	Confirmar	Confirmer	Bestätigen	確認	확인	确认	Confirmar
+ui.btn.retry	Retry	Riprova	Reintentar	Recommencer	Erneut versuchen	再挑戦	재시도	重试	Tentar Novamente
+ui.btn.next	Next	Avanti	Siguiente	Suivant	Weiter	次へ	다음	下一步	Próximo
+ui.btn.prev	Previous	Precedente	Anterior	Précédent	Vorherige	前へ	이전	上一步	Anterior
+ui.btn.skip	Skip	Salta	Omitir	Passer	Überspringen	スキップ	건너뛰기	跳过	Pular
 
-ui.options.title	Options	Opzioni	Configuración	Options	Einstellungen	オプション
-ui.options.language	Language	Lingua	Idioma	Langue	Sprache	言語
-ui.options.music	Music Volume	Volume Musica	Volumen Música	Volume Musique	Musiklautstärke	BGM音量
-ui.options.sfx	SFX Volume	Volume Effetti	Volumen SFX	Volume Effets	SFX-Lautstärke	効果音音量
-ui.options.haptics	Haptics	Vibrazione	Hápticos	Haptique	Haptik	振動
-ui.options.apply	Apply	Applica	Aplicar	Appliquer	Übernehmen	適用
-ui.options.reset	Reset	Reimposta	Restablecer	Réinitialiser	Zurücksetzen	リセット
-ui.options.back	Back	Indietro	Atrás	Retour	Zurück	戻る
+ui.loading.loading	Loading...	Caricamento...	Cargando...	Chargement...	Lädt...	読み込み中…	로딩중…	加载中…	Carregando…
+ui.loading.syncing	Syncing...	Sincronizzazione...	Sincronizando...	Synchronisation...	Synchronisiert…	同期中…	동기화중…	同步中…	Sincronizando…
+ui.loading.connecting	Connecting...	Connessione...	Conectando...	Connexion...	Verbinden…	接続中…	연결중…	连接中…	Conectando…
+ui.loading.downloading	Downloading...	Download...	Descargando...	Téléchargement...	Wird heruntergeladen…	ダウンロード中…	다운로드중…	下载中…	Baixando…
+ui.loading.initializing	Initializing...	Inizializzazione...	Inicializando...	Initialisation...	Initialisierung…	初期化中…	초기화중…	初始化中…	Inicializando…
+ui.loading.wait	Please wait...	Attendere...	Por favor espera...	Veuillez patienter...	Bitte warten...	お待ちください…	잠시만 기다려주세요…	请稍候…	Aguarde...
 
-ui.loading.loading	Loading...	Caricamento...	Cargando...	Chargement...	Lädt...	読み込み中…
-ui.loading.syncing	Syncing...	Sincronizzazione...	Sincronizando...	Synchronisation...	Synchronisiert...	同期中…
-ui.loading.connecting	Connecting...	Connessione...	Conectando...	Connexion...	Verbindung...	接続中…
+ui.opt.title	Options	Opzioni	Opciones	Options	Optionen	オプション	옵션	选项	Opções
+ui.opt.audio	Audio	Audio	Audio	Audio	Audio	オーディオ	오디오	音频	Áudio
+ui.opt.music	Music Volume	Volume Musica	Volumen Música	Volume Musique	Musiklautstärke	音楽音量	BGM 음량	音乐音量	Volume da Música
+ui.opt.sfx	SFX Volume	Volume Effetti	Volumen SFX	Volume Effets	SFX-Lautstärke	効果音音量	SFX 음량	音效音量	Volume de Efeitos
+ui.opt.mute_music	Mute Music	Muta Musica	Silenciar Música	Mute Musique	Musik stummschalten	音楽ミュート	음악 음소거	静音音乐	Silenciar Música
+ui.opt.mute_sfx	Mute SFX	Muta SFX	Silenciar SFX	Mute Effets	SFX stummschalten	SFXミュート	SFX 음소거	静音音效	Silenciar Efeitos
+ui.opt.haptics	Haptics	Vibrazione	Hápticos	Haptique	Haptik	触覚フィードバック	햅틱	触觉	Hápticos
+ui.opt.language	Language	Lingua	Idioma	Langue	Sprache	言語	언어	语言	Idioma
+ui.opt.graphics	Graphics	Grafica	Gráficos	Graphismes	Grafik	グラフィック	그래픽	图像	Gráficos
+ui.opt.vibration	Vibration	Vibrazione	Vibración	Vibration	Vibration	振動	진동	震动	Vibração
+ui.opt.reset	Reset	Reimposta	Restablecer	Réinitialiser	Zurücksetzen	リセット	리셋	重置	Redefinir
+ui.opt.apply	Apply	Applica	Aplicar	Appliquer	Übernehmen	適用	적용	应用	Aplicar
+ui.opt.restore_default	Restore Defaults	Ripristina predefiniti	Restaurar valores	Restaurer défauts	Standard wiederherstellen	デフォルトに戻す	기본값 복원	恢复默认	Restaurar Padrões
 
-ui.store.title	Shop	Negozio	Tienda	Boutique	Shop	ショップ
-ui.store.buy	Buy	Compra	Comprar	Acheter	Kaufen	購入
-ui.store.price	Price	Prezzo	Precio	Prix	Preis	価格
-ui.store.not_enough_coins	Not enough coins	Monete insufficienti	No tienes monedas	Pas assez de pièces	Nicht genug Münzen	コインが足りません
-ui.store.purchased	Purchased	Acquistato	Comprado	Acheté	Gekauft	購入済み
+ui.access.title	Accessibility	Accessibilità	Accesibilidad	Accessibilité	Barrierefreiheit	アクセシビリティ	접근성	辅助功能	Acessibilidade
+ui.access.color_blind_mode	Color Blind Mode	Modalità daltonismo	Modo daltonismo	Mode daltonien	Farbfehlsichtigkeit	色覚サポート	색각 보정	色盲模式	Modo Daltônico
+ui.access.large_text	Large Text	Testo grande	Texto grande	Texte large	Große Schrift	大きな文字	큰 글자	大号文字	Texto Grande
 
-ui.ads.watch_ad	Watch Ad	Guarda Ad	Ver anuncio	Regarder pub	Anzeige ansehen	広告を見る
-ui.ads.rewards	Reward	Ricompensa	Recompensa	Récompense	Belohnung	報酬
-ui.ads.claim	Claim	Riscatta	Reclamar	Récupérer	Einlösen	受け取る
+store.title	Store	Negozio	Tienda	Boutique	Shop	ショップ	상점	商店	Loja
+store.buy	Buy	Compra	Comprar	Acheter	Kaufen	購入	구매	购买	Comprar
+store.free	Free	Gratis	Gratis	Gratuit	Kostenlos	無料	무료	免费	Grátis
+store.price	Price	Prezzo	Precio	Prix	Preis	価格	가격	价格	Preço
+store.coins	Coins	Monete	Monedas	Pièces	Münzen	コイン	코인	金币	Moedas
+store.gems	Gems	Gemme	Gemas	Gemmes	Edelsteine	ジェム	젬	宝石	Gemas
+store.energy	Energy	Energia	Energía	Énergie	Energie	エネルギー	에너지	能量	Energia
+store.lives	Lives	Vite	Vidas	Vies	Leben	ライフ	목숨	生命	Vidas
+store.remove_ads	Remove Ads	Rimuovi Ads	Quitar anuncios	Supprimer pubs	Werbung entfernen	広告削除	광고 제거	移除广告	Remover Anúncios
+store.not_enough_currency	Not enough currency	Crediti insufficienti	Monedas insuficientes	Monnaie insuffisante	Nicht genug Währung	通貨不足	재화 부족	货币不足	Moeda insuficiente
+store.purchased	Purchased	Acquistato	Comprado	Acheté	Gekauft	購入済み	구매 완료	已购买	Comprado
+store.special_offer	Special Offer	Offerta speciale	Oferta especial	Offre spéciale	Sonderangebot	特別オファー	특별 상품	特别优惠	Oferta Especial
+store.limited_time	Limited Time	Time limitato	Límite de tiempo	Temps limité	Begrenzte Zeit	期間限定	기간 한정	限时	Limite de Tempo
 
-ui.results.title	Results	Risultati	Resultados	Résultats	Ergebnisse	結果
-ui.results.retry	Retry	Riprova	Reintentar	Rejouer	Erneut	再挑戦
-ui.results.next	Next	Avanti	Siguiente	Suivant	Weiter	次へ
-ui.results.score	Score	Punteggio	Puntuación	Score	Punktzahl	スコア
-ui.results.highscore	High Score	Record	Puntuación Máxima	Meilleur Score	Bestwert	ハイスコア
+ads.watch_ad	Watch Ad	Guarda Ad	Ver anuncio	Regarder pub	Anzeige ansehen	広告を見る	광고 보기	观看广告	Assistir Anúncio
+ads.skip_ad	Skip Ad	Salta Ad	Omitir anuncio	Passer pub	Anzeige überspringen	広告をスキップ	광고 건너뛰기	跳过广告	Pular Anúncio
+ads.reward	Reward	Ricompensa	Recompensa	Récompense	Belohnung	報酬	보상	奖励	Recompensa
+ads.claim	Claim	Riscatta	Reclamar	Récupérer	Einlösen	受け取る	보상 받기	领取	Resgatar
+ads.no_ads_available	No ads available	Nessun annuncio disponibile	No hay anuncios	Plus d'annonces	Keine Anzeigen verfügbar	広告なし	광고 없음	暂无广告	Sem anúncios
+ads.reward_unlocked	Reward unlocked	Ricompensa sbloccata	Recompensa desbloqueada	Récompense débloquée	Belohnung freigeschaltet	報酬アンロック	보상 해제	奖励已解锁	Recompensa desbloqueada
 
-ui.error.network_no_connection	No Internet Connection	Nessuna connessione	Ninguna conexión	Pas de connexion	Keine Verbindung	インターネット接続なし
-ui.error.server_down	Server Unavailable	Server non disponibile	Servidor no disponible	Serveur indisponible	Server nicht erreichbar	サーバーに接続できません
-ui.error.unexpected	Error	Errore	Error	Erreur	Fehler	エラー
+game.score	Score	Punteggio	Puntaje	Score	Punktzahl	スコア	점수	得分	Pontuação
+game.best_score	Best	Record	Mejor	Meilleur	Bester	ベスト	최고 기록	最佳	Recorde
+game.high_score	High Score	Record personale	Puntuación máxima	Meilleur score	Höchste Punktzahl	ハイスコア	하이스코어	最高分	Alta Pontuação
+game.coins	Coins	Monete	Monedas	Pièces	Münzen	コイン	코인	金币	Moedas
+game.gems	Gems	Gemme	Gemas	Gemmes	Edelsteine	ジェム	젬	宝石	Gemas
+game.energy	Energy	Energia	Energía	Énergie	Energie	エネルギー	에너지	能量	Energia
+game.stamina	Stamina	Resistenza	Aguante	Endurance	Ausdauer	スタミナ	스태미나	体力	Vigor
+game.lives	Lives	Vite	Vidas	Vies	Leben	ライフ	목숨	生命	Vidas
+game.wave	Wave	Ondata	Oleada	Vague	Welle	ウェーブ	웨이브	波次	Onda
+game.combo	Combo	Combo	Combo	Combo	Kombo	コンボ	콤보	连击	Combo
+game.time	Time	Tempo	Tiempo	Temps	Zeit	時間	시간	时间	Tempo
+game.level	Level	Livello	Nivel	Niveau	Stufe	レベル	레벨	关卡	Nível
+game.xp	XP	XP	XP	XP	EP	経験値	경험치	经验	XP
 
-ui.notifications.daily_reward	Daily Reward Available!	Ricompensa Giornaliera!	¡Recompensa diaria!	Récompense quotidienne!	Tägliche Belohnung!	デイリー報酬！
-ui.notifications.energy_full	Energy Full!	Energia Piena!	¡Energía Llena!	Énergie pleine!	Energie voll!	エネルギー満タン！
-ui.notifications.new_items	New Items!	Nuovi Oggetti!	¡Nuevos objetos!	Nouveaux objets!	Neue Gegenstände!	新しいアイテム！
+hud.hp	HP	PV	PV	PV	LP	HP	HP	生命值	HP
+hud.mp	MP	PM	PM	PM	MP	MP	MP	魔力	MP
+hud.pause	Pause	Pausa	Pausa	Pause	Pause	一時停止	일시정지	暂停	Pausa
+hud.resume	Resume	Riprendi	Reanudar	Reprendre	Fortsetzen	再開	재개	继续	Continuar
 
-game.tutorial.welcome	Welcome!	Benvenuto!	¡Bienvenido!	Bienvenue!	Willkommen!	ようこそ！
-game.tutorial.tap_to_continue	Tap to continue	Tocca per continuare	Toca para continuar	Appuyez pour continuer	Weiter tippen	タップで続行
-game.tutorial.move	Move your character	Muovi il personaggio	Mueve tu personaje	Déplace ton personnage	Bewege deinen Charakter	キャラクターを移動する
+lvl.select.title	Level Select	Seleziona livello	Selección de nivel	Choix du niveau	Levelauswahl	レベル選択	레벨 선택	关卡选择	Seleção de Fase
+lvl.locked	Locked	Bloccato	Bloqueado	Bloqué	Gesperrt	ロック中	잠김	已锁定	Bloqueado
+lvl.unlocked	Unlocked	Sbloccato	Desbloqueado	Débloqué	Freigeschaltet	アンロック	해제됨	已解锁	Desbloqueado
 
-meta.energy	Energy	Energia	Energía	Énergie	Energie	エネルギー
-meta.coins	Coins	Monete	Monedas	Pièces	Münzen	コイン
-meta.gems	Gems	Gemme	Gemas	Gemmes	Edelsteine	ジェム
-meta.level	Lv	Lv	Nv	Niv	Stufe	レベル
+quest.title	Missions	Missioni	Misiones	Missions	Missionen	ミッション	미션	任务	Missões
+quest.new	New Mission	Nuova missione	Nueva misión	Nouvelle mission	Neue Mission	新ミッション	새 미션	新任务	Nova Missão
+quest.completed	Completed	Completata	Completada	Terminée	Abgeschlossen	完了	완료됨	已完成	Concluída
+quest.progress	Progress	Progresso	Progreso	Progression	Fortschritt	進行度	진행도	进度	Progresso
+
+ach.title	Achievements	Obiettivi	Logros	Succès	Erfolge	実績	도전과제	成就	Conquistas
+ach.unlocked	Unlocked	Sbloccato	Desbloqueado	Débloqué	Freigeschaltet	アンロック	해제됨	已解锁	Desbloqueado
+ach.locked	Locked	Bloccato	Bloqueado	Bloqué	Gesperrt	ロック中	잠김	已锁定	Bloqueado
+
+daily.title	Daily Reward	Ricompensa Giornaliera	Recompensa diaria	Récompense quotidienne	Tägliche Belohnung	デイリー報酬	일일 보상	每日奖励	Recompensa Diária
+daily.streak	Streak	Serie	racha	Série	Serie	連続	연속	连续	Sequência
+daily.claim_today	Claim today	Riscatta oggi	Reclama hoy	Récupérer aujourd'hui	Heute abholen	今日受け取る	오늘 받기	今日领取	Receber hoje
+daily.tomorrow	Tomorrow	Domani	Mañana	Demain	Morgen	明日	내일	明天	Amanhã
+
+bp.title	Battle Pass	Battle Pass	 Pase de batalla	Battle Pass	Battle Pass	バトルパス	배틀 패스	战斗通行证	Passe de Batalha
+bp.tier	Tier	Livello	Nivel	Rang	Stufe	ティア	티어	等级	Patamar
+bp.free_reward	Free Reward	Ricompensa gratuita	Recompensa gratuita	Récompense gratuite	Gratisbelohnung	無料報酬	무료 보상	免费奖励	Recompensa Grátis
+bp.premium_reward	Premium Reward	Ricompensa premium	Recompensa prémium	Récompense premium	Premium-Belohnung	プレミアム報酬	프리미엄 보상	高级奖励	Recompensa Premium
+
+notif.energy_full	Energy full!	Energia piena!	¡Energía llena!	Énergie pleine !	Energie voll!	エネルギー満タン！	에너지 가득！	能量已满！	Energia cheia!
+notif.daily_ready	Daily reward ready!	Ricompensa giornaliera pronta!	¡Recompensa diaria lista!	Récompense quotidienne prête !	Tägliche Belohnung bereit!	デイリー報酬受け取り可能！	일일 보상 준비됨！	每日奖励可领取！	Recompensa diária disponível!
+notif.new_items	New items available!	Nuovi oggetti disponibili!	¡Nuevos objetos disponibles!	Nouveaux objets disponibles !	Neue Gegenstände verfügbar!	新アイテム入手可能！	새 아이템 획득 가능！	有新道具可用！	Novos itens disponíveis!
+
+msg.error	Error	Errore	Error	Erreur	Fehler	エラー	오류	错误	Erro
+msg.network_error	No Internet connection	Nessuna connessione	Sin conexión	Pas de connexion	Keine Internetverbindung	インターネット接続なし	인터넷 연결 없음	无网络连接	Sem conexão com a Internet
+msg.server_down	Server unavailable	Server non disponibile	Servidor no disponible	Serveur indisponible	Server nicht erreichbar	サーバーに接続できません	서버 사용 불가	服务器不可用	Servidor indisponível
+msg.try_again	Try again	Riprova	Intentar otra vez	Réessayer	Erneut versuchen	再試行	다시 시도	重试	Tentar novamente
+msg.operation_failed	Operation failed	Operazione fallita	Operación fallida	Opération échouée	Vorgang fehlgeschlagen	操作に失敗しました	작업 실패	操作失败	Operação falhou
+msg.are_you_sure	Are you sure?	Sei sicuro?	¿Estás seguro?	Êtes-vous sûr ?	Sind Sie sicher?	よろしいですか？	정말입니까?	确定吗？	Tem certeza?
+msg.quit_game	Quit game?	Uscire dal gioco?	¿Salir del juego?	Quitter le jeu ?	Spiel beenden?	ゲームを終了しますか？	게임을 종료할까요?	要退出游戏吗？	Sair do jogo?
+
+dialog.skip_tutorial	Skip tutorial?	Salta il tutorial?	¿Saltar tutorial?	Passer le tutoriel ?	Tutorial überspringen?	チュートリアルをスキップしますか？	튜토리얼을 건너뛸까요?	跳过教程？	Pular tutorial?
+dialog.delete_save	Delete save?	Eliminare il salvataggio?	¿Borrar partida?	Supprimer la sauvegarde ?	Speicherstand löschen?	セーブデータを削除しますか？	세이브 데이터를 지울까요?	删除存档？	Apagar save?
+
+tutorial.welcome	Welcome!	Benvenuto!	¡Bienvenido!	Bienvenue !	Willkommen!	ようこそ！	환영합니다!	欢迎！	Bem-vindo!
+tutorial.tap_to_continue	Tap to continue	Tocca per continuare	Toca para continuar	Tapez pour continuer	Weiter tippen	タップで続行	탭하여 계속	点击继续	Toque para continuar
+tutorial.swipe_to_move	Swipe to move	Scorri per muoverti	Desliza para moverte	Glissez pour bouger	Zum Bewegen wischen	スワイプで移動	스와이프로 이동	滑动以移动	Deslize para mover
+tutorial.hold_to_attack	Hold to attack	Tieni premuto per attaccare	Mantén para atacar	Maintenez pour attaquer	Halten zum Angreifen	ホールドで攻撃	길게 눌러 공격	长按攻击	Mantenha para atacar
+tutorial.collect_coins	Collect coins	Raccogli le monete	Recoge monedas	Ramasse les pièces	Münzen sammeln	コインを集めよう	코인을 모으세요	收集金币	Colete moedas
+tutorial.avoid_enemies	Avoid enemies	Evita i nemici	Evita a los enemigos	Évite les ennemis	Gegner vermeiden	敵を避けよう	적을 피하세요	躲避敌人	Evite inimigos
