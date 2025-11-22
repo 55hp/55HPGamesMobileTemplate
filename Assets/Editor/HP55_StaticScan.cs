@@ -13,7 +13,7 @@ using UnityEngine;
 
 public static class HP55_StaticScan
 {
-    [MenuItem("Tools/hp55games/Static Scan/Run")]
+    [MenuItem("hp55games Tools/Static Scan/Run")]
     public static void Run()
     {
         var outPath = Path.Combine(Application.dataPath, "../StaticScan.md");

@@ -11,7 +11,7 @@ namespace hp55games.Editor
 {
     public static class TemplateAudit
     {
-        [MenuItem("Tools/hp55games/Export Template Audit")]
+        [MenuItem("hp55games Tools/Export Template Audit")]
         public static void Export()
         {
             var outPath = Path.Combine(Application.dataPath, "../TemplateAudit.md");
