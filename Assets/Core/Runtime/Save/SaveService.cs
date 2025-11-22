@@ -1,18 +1,10 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
 namespace hp55games.Mobile.Core.SaveService
 {
-    [Serializable]
-    public class SaveData
-    {
-        public int coins;
-        public string lastProfile = "default";
-        
-        public OptionsData options = new OptionsData(); 
-    }
-    
     [Serializable]
     public class OptionsData
     {
@@ -22,6 +14,29 @@ namespace hp55games.Mobile.Core.SaveService
         public string lang = "en";
         public bool  musicMute = false;
         public bool  sfxMute   = false;
+    }
+
+    [Serializable]
+    public class TimeStampEntry
+    {
+        public string key;
+        public string isoUtc; // DateTime in formato "o" (ISO 8601)
+    }
+
+    [Serializable]
+    public class SaveData
+    {
+        public int coins;
+        public string lastProfile = "default";
+
+        public OptionsData options = new OptionsData();
+
+        // --- TimeService data ---
+        public List<TimeStampEntry> timeStamps = new List<TimeStampEntry>();
+
+        // Per controllo base "clock back" / monotonic
+        public string lastUtcIso;
+        public double lastMonotonicSeconds;
     }
 }
 
@@ -43,16 +58,22 @@ namespace hp55games.Mobile.Core.Architecture
         {
             var path = Path.Combine(Application.persistentDataPath, FileName);
             if (File.Exists(path))
-                Data = JsonUtility.FromJson<hp55games.Mobile.Core.SaveService.SaveData>(File.ReadAllText(path));
+            {
+                Data = JsonUtility.FromJson<hp55games.Mobile.Core.SaveService.SaveData>(
+                    File.ReadAllText(path)
+                );
+            }
             else
-                Save();
+            {
+                Save(); // crea file con default
+            }
         }
 
         public void Save()
         {
-            var path = Path.Combine(Application.persistentDataPath, FileName);
-            File.WriteAllText(path, JsonUtility.ToJson(Data));
+            var path  = Path.Combine(Application.persistentDataPath, FileName);
+            var json  = JsonUtility.ToJson(Data);
+            File.WriteAllText(path, json);
         }
     }
 }
-
