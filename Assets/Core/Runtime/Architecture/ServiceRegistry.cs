@@ -5,6 +5,8 @@ using hp55games.Mobile.Core.Localization;
 using hp55games.Mobile.Core.Pooling;
 using hp55games.Mobile.Core.UI;
 using hp55games.Mobile.Core.Time;
+using hp55games.Mobile.Core.InputSystem;
+using hp55games.Mobile.Core.Context;
 
 namespace hp55games.Mobile.Core.Architecture
 {
@@ -15,7 +17,9 @@ namespace hp55games.Mobile.Core.Architecture
         public static void InstallDefaults()
         {
             Register<ILog>(new UnityLog());
+            
             Register<IEventBus>(new EventBus());
+            
             Register<IConfigService>(new ConfigService());
             
             var save = new SaveService();
@@ -25,10 +29,18 @@ namespace hp55games.Mobile.Core.Architecture
             Register<ITimeService>(new TimeService());
             
             Register<IContentLoader>(new AddressablesContentLoader());
+            
             Register<IGameStateMachine>(new GameStateMachine());
+            
             Register<IObjectPoolService>(new ObjectPoolService());
+            
             Register<IUIOptionsService>(new UIOptionsService());
+            
             Register<ILocalizationService>(new LocalizationService());
+            
+            Register<IGameContextService>(new GameContextService());
+            
+            Register<IInputService>(new InputService());
         }
 
 
