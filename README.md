@@ -1,297 +1,516 @@
-# 📘 55HP Games — Unity Mobile Template
+🧱 55HP Unity Mobile Template – Core Template Overview v1
 
-A clean, modular and production-ready starter template for mobile games built with Unity 2022 LTS.
+A Universal Mobile Starter Framework for Unity 2022 LTS+
 
-Designed to support **hypercasual**, **casual**, and **mid-core** mobile titles with solid foundations and reusable systems.
+📌 1. Mission & Philosophy
 
----
+The 55HP Unity Mobile Template is a practical, flexible and production-ready starter framework designed to support 99% of mobile games, from hypercasual to midcore roguelites (e.g., Slay the Spire–like), as well as offline single-player experiences.
 
-# 🚀 **1. Overview**
+The goal is simple:
 
-This template provides:
+Avoid rewriting the same architecture for every new project.
+Enable fast prototyping AND stable production.
+Stay simple, readable, and game-agnostic.
 
-- A robust **bootstrap flow** with additive scenes
-- A service-based architecture (Service Registry)
-- A modular **UI framework** (Pages, Popups, Overlays, Toasts)
-- A fully isolated **Options/Settings service** (volumes, mute, haptics, language)
-- An **Audio pipeline** with mixer routing + BGM crossfade
-- A **Game State Machine** with async transitions
-- Addressables-based loading for UI, audio, and content
-- A clean project structure ready to clone for new games
+This template is tailored for a solo dev / small-team workflow, especially one that values clarity, modularity, and the ability to integrate features back into the template over time.
 
-The entire system is built to *avoid spaghetti*, keep everything extensible, and make it easy to start multiple new projects from this single template.
+Core principles:
 
----
+Practical > Perfect — Real-world utility over academic purity.
 
-# 🧱 **2. Project Structure**
+Simple > Clever — Clarity and readability come first.
 
-```
-Assets/
- ├─ Core/
- │   ├─ Architecture/     (State Machine, Service Registry, Interfaces)
- │   ├─ Runtime/
- │   │    ├─ Audio/       (AudioOptionsBinder, MusicService helpers)
- │   │    ├─ Content/     (Addressables loader)
- │   │    ├─ Config/      (Config + ConfigService)
- │   │    ├─ Save/        (Save & Load system)
- │   │    ├─ Pooling/     (ObjectPoolService)
- │   │    ├─ UI/          (UI Runtime helpers)
- │   └─ ...
- ├─ Game/
- │   ├─ Features/         (States, Menu UI controllers, gameplay features)
- │   └─ ...
- ├─ Scenes/
- │   ├─ 00_Bootstrap
- │   ├─ Additive/
- │   │    ├─ 90_Systems_Audio
- │   │    └─ 91_UI_Root
- │   ├─ 01_Menu
- │   └─ 02_Gameplay (or your game scenes)
- └─ ...
+Reusable > Specific — Avoid game-specific logic inside the core.
 
-```
+Extensible > Rigid — Easy to customize for multiple genres.
 
----
+Consistent Architecture — Always the same bootstrap, UI, audio, services, and flow.
 
-# 🧭 **3. Scene Flow (Additive Bootstrap)**
+📍 2. High-Level Architecture
 
-The game ALWAYS starts from:
+The template is built around:
 
-```
-Scenes/00_Bootstrap
+Additive scene structure
 
-```
+Async Finite State Machine (FSM) controlling high-level game flow
 
-Inside this scene, the `GameBootstrap` component:
+Service Registry (simple DI)
 
-1. Installs core services
-2. Loads additive scenes in order:
-    - `90_Systems_Audio`
-    - `91_UI_Root`
-    - `01_Menu`
-3. Waits for UI services to initialize
-4. Starts the initial game state (`MainMenuState`)
+Save, Time, Config, Localization services
 
-This ensures:
+Universal UI Root (navigation, popups, overlays, toasts)
 
-- All services are registered
-- UI layers exist in scene
-- MusicPlayer exists
-- State machine transitions are safe
-- No timing hacks in UI or States
+Audio system (mixer, BGM crossfade, SFX routing)
 
----
+Addressables loader (centralized asset/content loading)
 
-# 🧩 **4. Service Architecture**
+Object pooling (lightweight, highly reusable)
 
-The template uses a simple and powerful **Service Registry**, similar to a mini-IoC container:
+Input Service (generic pointer/touch gestures)
 
-```csharp
-ServiceRegistry.Register<T>(instance);
-var service = ServiceRegistry.Resolve<T>();
+Game Context Service (runtime session info)
 
-```
+The template boot sequence always follows this flow:
 
-### Core services (installed in `InstallDefaults()`):
+00_Bootstrap (startup)
+ ├─ Install Services
+ ├─ Load Additive Scenes:
+ │    90_Systems_Audio
+ │    91_UI_Root
+ ├─ Load Initial Game Scene (01_Menu)
+ └─ Enter MainMenuState (FSM)
 
-| Service Type | Responsibility |
-| --- | --- |
-| `ILog` | Logging abstraction |
-| `IEventBus` | Messaging/event system |
-| `IConfigService` | Global SO config |
-| `ISaveService` | JSON save/load |
-| `IContentLoader` | Addressables wrapper |
-| `IGameStateMachine` | Async FSM |
-| `IUIOptionsService` | Master settings (volumes, mute, haptics, language) |
+🧩 3. Service Registry
 
-### UI services (installed in `UIServiceInstaller`, inside `91_UI_Root`):
+A lightweight service-locator providing:
 
-| Service | Responsibility |
-| --- | --- |
-| `IUINavigationService` | UI Pages (open/close) |
-| `IUIPopupService` | Popups with scrim |
-| `IUIOverlayService` | Fade & loading overlay |
-| `IUIToastService` | Toast messages |
-| `IMusicService` | Background music crossfades |
+Global registration at startup
 
----
+Resolve<T>() for runtime access
 
-# 🖥️ **5. UI Structure**
+No hidden magic, no external dependencies
 
-The UI Root scene (`91_UI_Root`) contains:
+Core Services Registered:
 
-```
-UIRoot (with UIRoot.cs)
-  └─ Canvas
-       ├─ Layer_HUD
-       ├─ Layer_Pages
-       ├─ Layer_Popups
-       ├─ Layer_Overlay
-       └─ Layer_Toasts
+ILog (UnityLog)
 
-```
+IEventBus
 
-You load UI elements via Addressables using:
+ISaveService
 
-- Pages → Navigation Service
-- Popups → Popup Service
-- Overlays → Overlay Service
-- Toasts → Toast Service
+ITimeService
 
-Each UI prefab is placed inside Addressables under:
+IConfigService
 
-```
-content/ui/pages/<PageName>
-content/ui/popups/<PopupName>
-content/ui/toasts/<ToastName>
-content/ui/overlays/<OverlayName>
+ILocalizationService
 
-```
+IUIOptionsService
 
----
+IContentLoader
 
-# ⏯️ **6. Audio Pipeline**
+IGameStateMachine
 
-### Music System (BGM)
+IObjectPoolService
 
-- Handled by `IMusicService` / `UIMusicService`
-- Uses a dual-AudioSource “crossfade” system
-- Prefab `MusicPlayer` lives in `90_Systems_Audio`
+IUINavigationService
 
-### Mixer & Options
+IUIPopupService
 
-- Music volume
-- SFX volume
-- Music/SFX mute
-- Bound to UIOptions via `AudioOptionsBinder`
+IUIOverlayService
 
-### Addressables
+IUIToastService
 
-BGM tracks live under:
+IGameContextService
 
-```
-content/audio/bgm/<TrackName>
+IInputService
 
-```
+🎮 4. Async Game State Machine (FSM)
 
----
+A robust async FSM manages high-level game flow.
 
-# 🎮 **7. Game State Machine (FSM)**
+Each state implements:
 
-The FSM uses async safe transitions:
-
-```csharp
-await fsm.ChangeStateAsync(new MainMenuState());
-
-```
-
-Every state implements:
-
-```csharp
 Task EnterAsync(CancellationToken ct);
 Task ExitAsync(CancellationToken ct);
 
-```
 
-### Initial State
+Core states included:
 
-`GameBootstrap` starts:
-
-```
 MainMenuState
 
-```
+GameplayState
 
-From there, you can push a UI page:
+PauseState
 
-```csharp
-await _nav.PushAsync(Addr.Content.UI.Pages.Main_Menu_Generic);
+ResultsState
 
-```
+LoadingState
 
-Or switch to gameplay:
+States are pure logic orchestration:
+no monobehaviour, no heavy dependencies, and interchangeable across games.
 
-```csharp
-await fsm.ChangeStateAsync(new GameplayState());
+🗺️ 5. Scene Architecture
+Required Scenes:
 
-```
+00_Bootstrap (entrypoint)
 
----
+90_Systems_Audio (BGM, SFX, Input driver)
 
-# 🎯 **8. Creating a New Game With This Template**
+91_UI_Root (main UI system)
 
-To start a new project:
+01_Menu
 
-1. **Duplicate** the entire template folder or repo
-2. Change:
-    - Project name
-    - Company name
-    - Bundle ID
-3. Create your own gameplay in `/Game/Features/`
-4. Add new UI Pages/Popups in Addressables
-5. Add new states (Menu → Gameplay → Results, etc.)
-6. Replace demo assets with your own
+02_Gameplay
 
-Everything else (UI, options, music, FSM, services, audio mixing, scene flow) is already set up for you.
+03_Results
 
----
+SceneFlowService
 
-# 📦 **9. Addressables Conventions**
+Handles transitions:
 
-### UI
+fade-in/out using UIOverlay
 
-```
-content/ui/pages/...
-content/ui/popups/...
-content/ui/toasts/...
-content/ui/overlays/...
+asynchronous loading
 
-```
+FSM state changes
 
-### Audio
+safe transitions between Menu → Gameplay → Results
 
-```
-content/audio/bgm/...
-content/audio/sfx/...
+Supports expandability (e.g., more states or scenes).
 
-```
+🖥️ 6. UI Architecture (Complete, Unified)
 
-### Config
+A powerful but simple UI system supporting:
 
-```
-config/main
+Screens (pages) via Navigation service
 
-```
+Popups (Addressables instantiable)
 
-### Content
+Toasts
 
-Game-specific items, prefabs, data, etc.
+Overlays (fade, loading, input blocker)
 
----
+Localization integration
 
-# 🧪 **10. Tests**
+Options integration (audio, language, haptics)
 
-All test scripts live under:
+UI Root Responsibilities:
 
-```
-Assets/Tests/
+Controller for:
 
-```
+Navigation stack
 
-Keep game scenes and test scenes **separated**.
+Popup stack
 
----
+Toast queue
 
-# 🏁 **Done**
+Overlay panel
 
-This template now provides:
+Global event binding for:
 
-- A stable and documented bootstrap
-- A clean layered UI system
-- A flexible Audio + Music pipeline
-- A powerful async-FSM
-- A reusable options/settings system
-- A reusable object pool
-- An architecture ready for any mobile game
+Language change
 
-You can now build your game directly on top of this structure without rewriting fundamentals.
+Options change
+
+Initialization of UI layers and containers
+
+UI Services:
+
+IUINavigationService
+
+IUIPopupService
+
+IUIOverlayService
+
+IUIToastService
+
+Addressables paths follow structure:
+
+ui/screens/...
+ui/popups/...
+ui/elements/...
+
+
+This system works for:
+
+hypercasual menus
+
+card-game interfaces
+
+RPG screens
+
+shop / inventory UIs
+
+roguelike map UIs
+
+cinematic overlays
+
+🔊 7. Audio Architecture (Complete)
+Core Systems:
+
+90_Systems_Audio contains:
+
+AudioMixer (Groups: Master, Music, SFX)
+
+MusicPlayer with crossfade
+
+Sound playback helper
+
+Features:
+
+Crossfade BGM (automatic or manual)
+
+Mute/Volume tied to UIOptionsService
+
+Addressables for loading music & SFX assets
+
+Haptics support integrated via UIOptions
+
+This architecture is enough to support:
+
+hypercasual loops
+
+roguelite ambience layers
+
+card-game UI SFX
+
+SFX bursts with pooling
+
+adaptive music systems (future-ready)
+
+💾 8. Save System (JSON)
+
+Simple, predictable, file-based save:
+
+Persistent path: save.json
+
+Classes:
+
+SaveData
+
+OptionsData
+
+TimeStampEntry
+
+Includes:
+
+coins
+
+profile
+
+options (music, sfx, hapt, lang, mute)
+
+timestamps (for cooldowns, login times, etc.)
+
+⏳ 9. Time Service
+
+Provides:
+
+UtcNow, LocalNow
+
+monotonic time (Time.realtimeSinceStartupAsDouble)
+
+timestamp logic:
+
+cooldown
+
+time since last
+
+daily checks
+
+clock-back detection (anti-cheat safeguard)
+
+⚙️ 10. Config Service
+
+Loads GameConfig from Addressables path:
+
+hp55games.Addr.Config.Main
+
+
+Allows:
+
+game version
+
+default difficulty
+
+default haptics
+
+any future config values
+
+📦 11. Content Loader (Addressables)
+
+Uniform entry point for Addressables:
+
+Load<T>(address)
+
+InstantiateAsync(address)
+
+Release(instance)
+
+ReleaseAsset(asset)
+
+Ensures consistent behavior across UI, FX, gameplay.
+
+🔁 12. Object Pooling
+
+Global pooling system:
+
+prefab → queue of inactive instances
+
+instance → original prefab
+
+Spawn() and Despawn()
+
+avoids GC allocs
+
+supports UI, FX, bullets, VFX bursts
+
+🎮 13. Input Service (NEW, Core)
+
+A generic pointer/touch abstraction with these events:
+
+PointerDown
+
+PointerUp
+
+Tap
+
+Hold
+
+Swipe
+
+Driven by InputServiceDriver placed in:
+
+90_Systems_Audio
+
+
+Supports:
+
+hypercasual gesture gameplay
+
+roguelike grid interaction
+
+card games
+
+puzzle/tap games
+
+offline single-player interactions
+
+No gameplay specifics inside:
+just pure gesture abstraction.
+
+🌐 14. Game Context Service (NEW, Core)
+
+Stores runtime-only information:
+
+ProfileId
+
+CurrentRunSeed
+
+CurrentLevelId
+
+IsDebug
+
+ResetRun()
+
+Useful for:
+
+procedural games (Map Game, roguelikes)
+
+games with sessions/runs
+
+multi-profile setups
+
+debugging helpers
+
+avoiding global statics or SaveService abuse
+
+Not persisted automatically; you decide what to save.
+
+🧩 15. Extending the Core
+
+Patterns:
+
+Add new states → register via FSM
+
+Add new services → ServiceRegistry.Register<T>
+
+Add new UI screens → Addressables + UI Navigation
+
+Create new reusable features during games → backport to template in branches
+
+📁 16. Recommended Folder Structure
+Assets/
+  Core/
+    Architecture/
+    FSM/
+    Save/
+    Time/
+    Config/
+    Context/
+    Input/
+    UI/
+      Navigation/
+      Popup/
+      Overlay/
+      Toast/
+      UIRoot/
+    Audio/
+    Addressables/
+    Pool/
+  Content/ (game-specific)
+  UI_Resources/ (localization)
+  Scenes/
+    00_Bootstrap
+    90_Systems_Audio
+    91_UI_Root
+    01_Menu
+    02_Gameplay
+    03_Results
+
+📝 17. Best Practices
+
+Keep Core free from gameplay logic
+
+Keep UI generic
+
+Use Addressables for everything non-code
+
+Prefer async (FSM, scene flow, loading)
+
+Keep SaveData small and meaningful
+
+Use GameContext to avoid global chaos
+
+Keep InputService minimal but consistent
+
+Always test states with cancellation tokens
+
+📌 18. Summary
+
+The 55HP Unity Mobile Template is a fully-featured, production-ready foundation to build any mobile game.
+It includes every necessary architectural system:
+
+Bootstrap
+
+Services
+
+FSM
+
+UI
+
+Audio
+
+Save
+
+Time
+
+Context
+
+Input
+
+Pooling
+
+Addressables
+
+No overengineering.
+No coupling with game-specific logic.
+Just a clean, extensible, universal mobile foundation.
+
+🎉 Ready to Build Games
+
+With this template, each new game becomes:
+
+“Clone → Rename → Implement gameplay → Ship.”
+
+And any generic feature you create while building games can be merged back into the template through branches like:
+
+feature/liveops
+
+feature/economy-lite
+
+feature/metaprogression
+
+feature/ads
+
+etc.
