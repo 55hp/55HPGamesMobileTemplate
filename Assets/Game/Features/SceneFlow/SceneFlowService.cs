@@ -24,7 +24,7 @@ namespace hp55games.Mobile.Game.SceneFlow
     /// </summary>
     public sealed class SceneFlowService : ISceneFlowService
     {
-        // Adjust these paths if your scene paths differ.
+        //TODO update this script with log service
         private const string MenuSceneName     = "01_Menu";
         private const string GameplaySceneName = "02_Gameplay";
         private const string ResultsSceneName  = "03_Results";
@@ -104,6 +104,17 @@ namespace hp55games.Mobile.Game.SceneFlow
                     Debug.LogWarning("[SceneFlowService] No ResultsState wired yet. Only scene changed.");
                 }
             });
+        }
+        
+        public async Task GoToPauseAsync()
+        {
+            if (_fsm == null)
+            {
+                //TODO update this script with log service _log?.Warn("[SceneFlowService] GoToPauseAsync called but state machine is null.");
+                return;
+            }
+
+            await _fsm.ChangeStateAsync(new PauseState());
         }
 
         /// <summary>

@@ -27,8 +27,18 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6899e63509003724c916f3dc8a88ee7c
+    m_Address: content/ui/screens/gameplay_hud
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 6b03290d5ea5b344cb90e6222f0f0afe
     m_Address: content/ui/popup_generic
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: be4501d1dfef0db4f84930b50a11f2b9
+    m_Address: content/ui/popups/pause
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

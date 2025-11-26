@@ -19,8 +19,14 @@ namespace hp55games.Mobile.Core.Context
         /// <summary>True if the game is running in debug/developer mode.</summary>
         bool IsDebug { get; set; }
 
+        /// <summary>Current score for this run (optional, can be 0 if unused).</summary>
+        int Score { get; set; }
+
+        /// <summary>Current lives for this run (optional, can be 0 or -1 if unused).</summary>
+        int Lives { get; set; }
+
         /// <summary>
-        /// Resets all run-related transient data.
+        /// Resets all run-related transient data (score, lives, level, seed).
         /// Does NOT touch ProfileId or IsDebug.
         /// </summary>
         void ResetRun();

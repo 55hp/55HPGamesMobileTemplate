@@ -7,6 +7,7 @@ namespace hp55games.Mobile.Core.SceneFlow
         Task GoToMenuAsync();
         Task GoToGameplayAsync(string levelId = null);
         Task GoToResultsAsync();
+        Task GoToPauseAsync();
     }
 }
 
