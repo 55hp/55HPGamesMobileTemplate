@@ -43,20 +43,29 @@ namespace hp55games.Mobile.UI
             if (_stack.Count > 0)
             {
                 var prev = _stack.Peek();
-                await FadeOut(prev.GameObject);
-                prev.GameObject.SetActive(false);
-            }
 
-            go.SetActive(true);
+                if (prev.GameObject == null)
+                {
+                    _stack.Pop();
+                }
+                else
+                {
+                    await FadeOut(prev.GameObject);
+                    prev.GameObject.SetActive(false);
+                }
+            }
 
             var cg = RequireCanvasGroup(go);
             cg.alpha = 0f;
             cg.blocksRaycasts = false;
 
+            go.SetActive(true);
+
             await FadeIn(go);
 
             _stack.Push(entry);
         }
+
 
         public async Task ReplaceAsync(string address)
         {

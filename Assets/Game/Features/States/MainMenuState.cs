@@ -23,7 +23,6 @@ namespace hp55games.Mobile.Core.Architecture.States
                                "Check that 91_UI_Root + UIServiceInstaller are loaded before starting the FSM.");
             }
 
-            // music is optional, non facciamo crashare lo stato se manca
             ServiceRegistry.TryResolve<IMusicService>(out _music);
         }
 
@@ -34,7 +33,7 @@ namespace hp55games.Mobile.Core.Architecture.States
             // 1) Mostra la pagina di main menu (Addressable prefab)
             if (_nav != null)
             {
-                await _nav.PushAsync(global::hp55games.Addr.Content.UI.Pages.Main_Menu_Page);
+                await _nav.ReplaceAsync(global::hp55games.Addr.Content.UI.Pages.Main_Menu_Page);
             }
 
             // 2) Musica di menu, se il servizio è disponibile

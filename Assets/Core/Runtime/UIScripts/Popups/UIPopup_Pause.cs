@@ -19,6 +19,9 @@ namespace hp55games.Mobile.Game.UI
         [SerializeField] private Button _optionsButton;
         [SerializeField] private Button _leaveButton;
 
+        [Header("Panels")]
+        [SerializeField] private GameObject _optionsPanel;
+        
         private ISceneFlowService _sceneFlow;
         private IUINavigationService _navigation;
         private IUIPopupService _popupService;
@@ -37,6 +40,9 @@ namespace hp55games.Mobile.Game.UI
 
             if (_leaveButton != null)
                 _leaveButton.onClick.AddListener(OnLeaveClicked);
+            
+            if(_optionsPanel != null)
+                _optionsPanel.SetActive(false);
         }
 
         private void OnDestroy()
@@ -56,16 +62,15 @@ namespace hp55games.Mobile.Game.UI
             _popupService.Close(gameObject);
         }
 
-        private async void OnOptionsClicked()
+        private void OnOptionsClicked()
         {
-            if (_navigation == null)
+            if (_optionsPanel == null)
             {
-                Debug.LogWarning("[UIPopup_Pause] IUINavigationService not found. Options will do nothing.");
+                Debug.LogWarning("[UIPopup_Pause] _optionsPanel not found or not referenced in the inspector. Options button will do nothing.");
                 return;
             }
 
-            // Usa l'indirizzo centralizzato in Addr (già presente nel template)
-            await _navigation.PushAsync(hp55games.Addr.Content.UI.Pages.Options_Page);
+            _optionsPanel.SetActive(true);
         }
 
         private async void OnLeaveClicked()

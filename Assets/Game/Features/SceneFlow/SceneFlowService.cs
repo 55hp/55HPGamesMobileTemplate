@@ -35,6 +35,71 @@ namespace hp55games.Mobile.Game.SceneFlow
         private readonly IGameStateMachine _fsm;
         private readonly IUIOverlayService _overlay;
 
+        private static readonly string[] ContentScenes =
+        {
+            MenuSceneName,
+            GameplaySceneName,
+            ResultsSceneName
+        };
+
+        private async Task SwitchContentSceneAsync(string targetScene)
+        {
+            Debug.Log($"[SceneFlowService] Switching content scene to: {targetScene}");
+
+            // 1) Unload all other content scenes
+            for (int i = 0; i < SceneManager.sceneCount; i++)
+            {
+                var s = SceneManager.GetSceneAt(i);
+
+                if (!s.isLoaded)
+                    continue;
+
+                bool isContent = Array.IndexOf(ContentScenes, s.name) >= 0;
+                if (!isContent)
+                    continue;
+
+                if (s.name == targetScene)
+                    continue;
+
+                Debug.Log($"[SceneFlowService] Unloading previous content scene: {s.name}");
+
+                var op = SceneManager.UnloadSceneAsync(s);
+                if (op != null)
+                {
+                    while (!op.isDone)
+                        await Task.Yield(); // IMPORTANTISSIMO
+                }
+            }
+
+            // 2) Load the target scene if not already loaded
+            var target = SceneManager.GetSceneByName(targetScene);
+
+            if (!target.isLoaded)
+            {
+                Debug.Log($"[SceneFlowService] Loading content scene additively: {targetScene}");
+
+                var op = SceneManager.LoadSceneAsync(targetScene, LoadSceneMode.Additive);
+                if (op != null)
+                {
+                    while (!op.isDone)
+                        await Task.Yield();
+                }
+
+                target = SceneManager.GetSceneByName(targetScene);
+            }
+
+            // 3) Set active scene
+            if (target.IsValid())
+            {
+                SceneManager.SetActiveScene(target);
+                Debug.Log($"[SceneFlowService] Active content scene set to: {targetScene}");
+            }
+            else
+            {
+                Debug.LogError($"[SceneFlowService] Loaded target scene {targetScene} is NOT valid!");
+            }
+        }
+        
         public SceneFlowService()
         {
             if (!ServiceRegistry.TryResolve<IGameStateMachine>(out _fsm))
@@ -47,6 +112,45 @@ namespace hp55games.Mobile.Game.SceneFlow
                 Debug.LogWarning("[SceneFlowService] IUIOverlayService not available. Overlay transitions will be skipped.");
             }
         }
+        
+        private async Task UnloadSceneIfLoadedAsync(string sceneName)
+        {
+            if (string.IsNullOrEmpty(sceneName))
+                return;
+
+            var scene = SceneManager.GetSceneByName(sceneName);
+            if (!scene.IsValid() || !scene.isLoaded)
+                return;
+
+            Debug.Log($"[SceneFlowService] Unloading scene: {sceneName}");
+            var op = SceneManager.UnloadSceneAsync(scene);
+
+            if (op == null)
+                return;
+
+            while (!op.isDone)
+                await Task.Yield();
+        }
+
+        private async Task LoadSceneIfNotLoadedAsync(string sceneName)
+        {
+            if (string.IsNullOrEmpty(sceneName))
+                return;
+
+            var scene = SceneManager.GetSceneByName(sceneName);
+            if (scene.IsValid() && scene.isLoaded)
+                return;
+
+            Debug.Log($"[SceneFlowService] Loading scene additively: {sceneName}");
+            var op = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
+
+            if (op == null)
+                return;
+
+            while (!op.isDone)
+                await Task.Yield();
+        }
+
 
         public async Task GoToMenuAsync()
         {
@@ -54,8 +158,20 @@ namespace hp55games.Mobile.Game.SceneFlow
 
             await RunWithOverlay(async () =>
             {
-                await EnsureSceneLoadedAndActive(MenuSceneName);
+                // 1) Non vogliamo né Gameplay né Results quando siamo nel menu
+                await UnloadSceneIfLoadedAsync(GameplaySceneName);
+                await UnloadSceneIfLoadedAsync(ResultsSceneName);
 
+                // 2) Il menu deve essere sempre disponibile
+                await LoadSceneIfNotLoadedAsync(MenuSceneName);
+
+                var menuScene = SceneManager.GetSceneByName(MenuSceneName);
+                if (menuScene.IsValid())
+                {
+                    SceneManager.SetActiveScene(menuScene);
+                }
+
+                // 3) Stato FSM
                 if (_fsm != null)
                 {
                     Debug.Log("[SceneFlowService] Changing FSM state to MainMenuState.");
@@ -63,9 +179,21 @@ namespace hp55games.Mobile.Game.SceneFlow
                 }
                 else
                 {
-                    Debug.LogWarning("[SceneFlowService] FSM is null. Only scene changed, no state transition.");
+                    Debug.LogWarning("[SceneFlowService] FSM is null in GoToMenuAsync. Only scene changed.");
                 }
             });
+        }
+
+        
+        private void DebugLoadedScenes(string context)
+        {
+            Debug.Log($"[SceneFlowService] --- Loaded scenes ({context}) ---");
+
+            for (int i = 0; i < SceneManager.sceneCount; i++)
+            {
+                var s = SceneManager.GetSceneAt(i);
+                Debug.Log($"[SceneFlowService]   {i}: {s.name} (loaded={s.isLoaded}, active={s == SceneManager.GetActiveScene()})");
+            }
         }
 
         public async Task GoToGameplayAsync(string levelId = null)
@@ -74,10 +202,19 @@ namespace hp55games.Mobile.Game.SceneFlow
 
             await RunWithOverlay(async () =>
             {
-                // 1) Assicura che la scena gameplay sia caricata e attiva
-                await EnsureSceneLoadedAndActive(GameplaySceneName);
+                // 1) In gameplay non vogliamo la scena di Results
+                await UnloadSceneIfLoadedAsync(ResultsSceneName);
 
-                // 2) Cambia stato FSM, se disponibile
+                // 2) Assicuriamoci che il gameplay sia caricato
+                await LoadSceneIfNotLoadedAsync(GameplaySceneName);
+
+                var gameplayScene = SceneManager.GetSceneByName(GameplaySceneName);
+                if (gameplayScene.IsValid())
+                {
+                    SceneManager.SetActiveScene(gameplayScene);
+                }
+
+                // 3) Stato FSM
                 if (_fsm != null)
                 {
                     Debug.Log("[SceneFlowService] Changing FSM state to GameplayState.");
@@ -85,10 +222,11 @@ namespace hp55games.Mobile.Game.SceneFlow
                 }
                 else
                 {
-                    Debug.LogWarning("[SceneFlowService] FSM is null in GoToGameplayAsync. Only scene changed, no state transition.");
+                    Debug.LogWarning("[SceneFlowService] FSM is null in GoToGameplayAsync. Only scene changed.");
                 }
             });
-        }  
+        }
+ 
 
         public async Task GoToResultsAsync()
         {
@@ -96,15 +234,31 @@ namespace hp55games.Mobile.Game.SceneFlow
 
             await RunWithOverlay(async () =>
             {
-                await EnsureSceneLoadedAndActive(ResultsSceneName);
+                // 1) In results non ci serve più il gameplay
+                await UnloadSceneIfLoadedAsync(GameplaySceneName);
 
+                // 2) Carichiamo la scena Results se necessario
+                await LoadSceneIfNotLoadedAsync(ResultsSceneName);
+
+                var resultsScene = SceneManager.GetSceneByName(ResultsSceneName);
+                if (resultsScene.IsValid())
+                {
+                    SceneManager.SetActiveScene(resultsScene);
+                }
+
+                // 3) Stato FSM
                 if (_fsm != null)
                 {
+                    Debug.Log("[SceneFlowService] Changing FSM state to ResultState.");
                     await _fsm.ChangeStateAsync(new ResultState());
-                    Debug.LogWarning("[SceneFlowService] No ResultsState wired yet. Only scene changed.");
+                }
+                else
+                {
+                    Debug.LogWarning("[SceneFlowService] FSM is null in GoToResultsAsync. Only scene changed.");
                 }
             });
         }
+
         
         public async Task GoToPauseAsync()
         {
@@ -135,42 +289,5 @@ namespace hp55games.Mobile.Game.SceneFlow
                 await _overlay.FadeOutAsync(FadeDuration);
             }
         }
-
-        private static async Task EnsureSceneLoadedAndActive(string sceneName)
-        {
-            if (string.IsNullOrWhiteSpace(sceneName))
-            {
-                Debug.LogError("[SceneFlowService] Scene name is null or empty.");
-                return;
-            }
-
-            var scene = SceneManager.GetSceneByName(sceneName);
-
-            if (!scene.isLoaded)
-            {
-                Debug.Log($"[SceneFlowService] Loading scene additively: {sceneName}");
-                var op = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
-                if (op == null)
-                {
-                    Debug.LogError($"[SceneFlowService] LoadSceneAsync returned null for: {sceneName}");
-                    return;
-                }
-
-                while (!op.isDone)
-                    await Task.Yield();
-
-                scene = SceneManager.GetSceneByName(sceneName);
-            }
-
-            if (!scene.IsValid())
-            {
-                Debug.LogError($"[SceneFlowService] Scene not valid after load: {sceneName}");
-                return;
-            }
-
-            SceneManager.SetActiveScene(scene);
-            Debug.Log($"[SceneFlowService] Active scene set to: {sceneName}");
-        }
-
     }
 }

@@ -1195,6 +1195,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1304211233939185214}
   - component: {fileID: 7223172612677514619}
+  - component: {fileID: -6085459183698053597}
   m_Layer: 5
   m_Name: UIPopup_Generic
   m_TagString: Untagged
@@ -1240,6 +1241,18 @@ MonoBehaviour:
   body: {fileID: 8512143287454173318}
   confirm: {fileID: 3289515501643576388}
   cancel: {fileID: 926802716859898117}
+--- !u!225 &-6085459183698053597
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6515350216062104496}
+  m_Enabled: 1
+  m_Alpha: 0
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &6600752599349355355
 GameObject:
   m_ObjectHideFlags: 0
