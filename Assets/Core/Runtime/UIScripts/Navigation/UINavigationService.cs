@@ -69,11 +69,46 @@ namespace hp55games.Mobile.UI
 
         public async Task ReplaceAsync(string address)
         {
-            if (_stack.Count > 0)
-                await PopAsync();
+            await EnsurePagesRootAsync();
+            if (_pagesRoot == null) return;
 
-            await PushAsync(address);
+            // 1) Istanzia la nuova pagina (invisibile all'inizio)
+            var go = await _loader.InstantiateAsync(address, _pagesRoot);
+            if (go == null)
+            {
+                Debug.LogError($"[UINavigationService] ReplaceAsync: instanziazione fallita per '{address}'");
+                return;
+            }
+
+            var newEntry = new PageEntry(address, go);
+
+            // 2) Garantiamo un CanvasGroup sulla nuova page e alpha = 0
+            var cg = RequireCanvasGroup(go);
+            cg.alpha = 0f;
+            cg.blocksRaycasts = false;
+
+            // Attiviamo l'oggetto SOLO dopo aver settato alpha a 0,
+            // così non c'è mai un frame con alpha 1 di "flash".
+            go.SetActive(true);
+
+            // 3) Se c'è una page corrente, la facciamo fade-out e la distruggiamo
+            if (_stack.Count > 0)
+            {
+                var current = _stack.Pop();
+                if (current.GameObject != null)
+                {
+                    await FadeOut(current.GameObject);
+                    Object.Destroy(current.GameObject);
+                }
+            }
+
+            // 4) Fade-in della nuova pagina
+            await FadeIn(go);
+
+            // 5) Mettiamo la nuova page in cima allo stack
+            _stack.Push(newEntry);
         }
+
 
         public async Task PopAsync()
         {

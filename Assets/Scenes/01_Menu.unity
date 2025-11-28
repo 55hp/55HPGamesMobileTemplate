@@ -415,7 +415,6 @@ GameObject:
   m_Component:
   - component: {fileID: 27850531668431438}
   - component: {fileID: 7646726903963753167}
-  - component: {fileID: 6122026864904712422}
   - component: {fileID: 6135945900541583723}
   m_Layer: 0
   m_Name: Main Camera (2D Menu)
@@ -510,7 +509,6 @@ GameObject:
   m_Component:
   - component: {fileID: 5447620193901475557}
   - component: {fileID: 5433403099975357802}
-  - component: {fileID: 7003348645107013187}
   - component: {fileID: 3410684487256831775}
   m_Layer: 0
   m_Name: Main Camera (3D Menu)
@@ -585,14 +583,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!81 &6122026864904712422
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1980523658376112628}
-  m_Enabled: 1
 --- !u!114 &6135945900541583723
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -649,14 +639,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a9ae2266e68d0bd40ab5977c4e75b3be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!81 &7003348645107013187
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5388359782141915264}
-  m_Enabled: 0
 --- !u!20 &7646726903963753167
 Camera:
   m_ObjectHideFlags: 0
