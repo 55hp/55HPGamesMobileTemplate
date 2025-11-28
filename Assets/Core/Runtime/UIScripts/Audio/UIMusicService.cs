@@ -85,9 +85,7 @@ namespace hp55games.Mobile.UI
             _inactiveSource.volume = MAX_VOLUME;
 
             // swap A/B
-            var tmp = _activeSource;
-            _activeSource = _inactiveSource;
-            _inactiveSource = tmp;
+            (_activeSource, _inactiveSource) = (_inactiveSource, _activeSource);
         }
 
         public async Task StopAsync(float fadeOut = 0.5f)
