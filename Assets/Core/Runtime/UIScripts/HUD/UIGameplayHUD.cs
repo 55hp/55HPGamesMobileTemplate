@@ -75,7 +75,7 @@ namespace hp55games.Mobile.Game.UI
         private void UpdateScoreLabel(int value)
         {
             if (_scoreLabel != null)
-                _scoreLabel.text = $"Score: {value}";
+                _scoreLabel.text = value.ToString();
         }
 
         private void UpdateLivesLabel(int value)
@@ -91,7 +91,7 @@ namespace hp55games.Mobile.Game.UI
             else
             {
                 _livesLabel.gameObject.SetActive(true);
-                _livesLabel.text = $"Lives: {value}";
+                _livesLabel.text = value.ToString();
             }
         }
 
