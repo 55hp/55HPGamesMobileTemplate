@@ -15,6 +15,12 @@ namespace hp55games.Mobile.UI
         [SerializeField]
         private string localizationKey;
 
+        [SerializeField]
+        private string prefix;
+        
+        [SerializeField]
+        private string suffix;
+        
         private TextMeshProUGUI _label;
         private ILocalizationService _loc;
 
@@ -52,7 +58,7 @@ namespace hp55games.Mobile.UI
             if (_label == null || _loc == null || string.IsNullOrEmpty(localizationKey))
                 return;
 
-            _label.text = _loc.Get(localizationKey);
+            _label.text = prefix + _loc.Get(localizationKey) + suffix;
         }
 
         /// <summary>
