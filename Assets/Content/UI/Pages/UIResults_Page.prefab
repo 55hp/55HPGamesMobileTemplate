@@ -538,7 +538,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8eb246891c62a1d49a1f2a99d180cb68, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _scoreLabel: {fileID: 8726725417000410405}
+  _scoreLabel: {fileID: 4296746762574009008}
   _retryButton: {fileID: 2010616346656092546}
   _menuButton: {fileID: 7278600809024751516}
 --- !u!1 &5482922415324729887

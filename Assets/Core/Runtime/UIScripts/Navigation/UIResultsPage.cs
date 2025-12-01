@@ -1,6 +1,7 @@
 using hp55games.Mobile.Core.Architecture;
 using hp55games.Mobile.Core.Context;
 using hp55games.Mobile.Core.SceneFlow;
+using hp55games.Mobile.UI;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -16,7 +17,7 @@ namespace hp55games.Mobile.Game.UI
     public sealed class UIResultsPage : MonoBehaviour
     {
         [Header("UI")]
-        [SerializeField] private TextMeshProUGUI _scoreLabel;
+        [SerializeField] private UILocalizedText _scoreLabel;
         [SerializeField] private Button _retryButton;
         [SerializeField] private Button _menuButton;
 
@@ -31,7 +32,10 @@ namespace hp55games.Mobile.Game.UI
             int score = _context?.Score ?? 0;
 
             if (_scoreLabel != null)
-                _scoreLabel.text = $"Score: {score}";
+            {
+                _scoreLabel.SetSuffix(" :" + score.ToString());
+                _scoreLabel.Refresh();
+            }
 
             if (_retryButton != null)
                 _retryButton.onClick.AddListener(OnRetryClicked);

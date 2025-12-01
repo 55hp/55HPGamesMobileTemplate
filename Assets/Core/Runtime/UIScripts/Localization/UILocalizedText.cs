@@ -14,16 +14,12 @@ namespace hp55games.Mobile.UI
     {
         [SerializeField]
         private string localizationKey;
-
-        [SerializeField]
-        private string prefix;
-        
-        [SerializeField]
-        private string suffix;
         
         private TextMeshProUGUI _label;
         private ILocalizationService _loc;
-
+        private string prefix = "";
+        private string suffix = "";
+        
         private void Awake()
         {
             _label = GetComponent<TextMeshProUGUI>();
@@ -35,25 +31,12 @@ namespace hp55games.Mobile.UI
                 return;
             }
 
-            // Ci iscriviamo al cambio lingua
-            _loc.LanguageChanged += OnLanguageChanged;
-
-            // Aggiorniamo subito alla lingua corrente
+            _loc.LanguageChanged += Refresh;
+            
             Refresh();
         }
 
-        private void OnDestroy()
-        {
-            if (_loc != null)
-                _loc.LanguageChanged -= OnLanguageChanged;
-        }
-
-        private void OnLanguageChanged()
-        {
-            Refresh();
-        }
-
-        private void Refresh()
+        public void Refresh()
         {
             if (_label == null || _loc == null || string.IsNullOrEmpty(localizationKey))
                 return;
@@ -61,13 +44,14 @@ namespace hp55games.Mobile.UI
             _label.text = prefix + _loc.Get(localizationKey) + suffix;
         }
 
-        /// <summary>
-        /// Facoltativo: permette di cambiare la chiave da codice.
-        /// </summary>
-        public void SetKey(string key)
+        public void Setprefix(string prefix)
         {
-            localizationKey = key;
-            Refresh();
+            this.prefix = prefix;
+        }
+
+        public void SetSuffix(string suffix)
+        {
+            this.suffix = suffix;
         }
     }
 }
