@@ -1,46 +1,43 @@
+using System;
 using hp55games.Mobile.Core.Architecture;
 using hp55games.Mobile.Core.Context;
+using hp55games.Mobile.Core.Gameplay.Events;
 using hp55games.Mobile.Core.SceneFlow;
-using TMPro;
+using hp55games.Mobile.UI;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace hp55games.Mobile.Game.UI
 {
-    /// <summary>
-    /// Generic gameplay HUD:
-    /// - Displays current score and lives (if available).
-    /// - Exposes methods to update score/lives from gameplay code.
-    /// - Pause button uses SceneFlowService to enter PauseState.
-    /// </summary>
     public sealed class UIGameplayHUD : MonoBehaviour
     {
         [Header("UI")]
-        [SerializeField] private TextMeshProUGUI _scoreLabel;
-        [SerializeField] private TextMeshProUGUI _livesLabel;
+        [SerializeField] private UILocalizedText _scoreLabel;
+        [SerializeField] private UILocalizedText _livesLabel;
         [SerializeField] private Button _pauseButton;
 
         private IGameContextService _context;
         private ISceneFlowService _sceneFlow;
+        private IEventBus _bus;
+        
+        private IDisposable _scoreSub;
+        private IDisposable _livesSub;
+
 
         private void Awake()
         {
-            // Resolve services (if available)
-            ServiceRegistry.TryResolve(out _context);
             _sceneFlow = ServiceRegistry.Resolve<ISceneFlowService>();
-
-            // Init UI from context (if present)
-            int score = 0;
-            int lives = -1;
-
-            if (_context != null)
+            _context = ServiceRegistry.Resolve<IGameContextService>();
+            _bus = ServiceRegistry.Resolve<IEventBus>();
+            
+            if (_bus != null)
             {
-                score = _context.Score;
-                lives = _context.Lives;
+                _scoreSub = _bus.Subscribe<ScoreChangedEvent>(UpdateScoreLabel);
+                _livesSub = _bus.Subscribe<HpChangedEvent>(UpdateLivesLabel);
             }
-
-            UpdateScoreLabel(score);
-            UpdateLivesLabel(lives);
+            
+            Init();
+            
 
             if (_pauseButton != null)
                 _pauseButton.onClick.AddListener(OnPauseClicked);
@@ -52,38 +49,37 @@ namespace hp55games.Mobile.Game.UI
                 _pauseButton.onClick.RemoveListener(OnPauseClicked);
         }
 
-        // --- Public API for gameplay code ---
-
-        public void SetScore(int newScore)
-        {
-            UpdateScoreLabel(newScore);
-
-            if (_context != null)
-                _context.Score = newScore;
-        }
-
-        public void SetLives(int newLives)
-        {
-            UpdateLivesLabel(newLives);
-
-            if (_context != null)
-                _context.Lives = newLives;
-        }
-
-        // --- Internal helpers ---
-
-        private void UpdateScoreLabel(int value)
+        private void Init()
         {
             if (_scoreLabel != null)
-                _scoreLabel.text = value.ToString();
+            {
+                _scoreLabel.SetSuffix(" :" + _context.Score.ToString());
+                _scoreLabel.Refresh();
+            }
+            
+            if (_livesLabel != null)
+            {
+                _livesLabel.SetSuffix(" :" + _context.Lives.ToString());
+                _livesLabel.Refresh();
+            }
+            
         }
 
-        private void UpdateLivesLabel(int value)
+        private void UpdateScoreLabel(ScoreChangedEvent _)
+        {
+            if (_scoreLabel != null)
+            {
+                _scoreLabel.SetSuffix(" :" + _context.Score.ToString());
+                _scoreLabel.Refresh();
+            }
+        }
+
+        private void UpdateLivesLabel(HpChangedEvent _)
         {
             if (_livesLabel == null)
                 return;
 
-            if (value < 0)
+            if (_context.Lives < 0)
             {
                 // -1 or less = "no lives system", hide the label
                 _livesLabel.gameObject.SetActive(false);
@@ -91,7 +87,11 @@ namespace hp55games.Mobile.Game.UI
             else
             {
                 _livesLabel.gameObject.SetActive(true);
-                _livesLabel.text = value.ToString();
+                if (_livesLabel != null)
+                {
+                    _livesLabel.SetSuffix(" :" + _context.Lives.ToString());
+                    _livesLabel.Refresh();
+                }
             }
         }
 
@@ -99,11 +99,9 @@ namespace hp55games.Mobile.Game.UI
         {
             if (_sceneFlow == null)
             {
-                Debug.LogWarning("[UIGameplayHUD] ISceneFlowService not found. Pause button will do nothing.");
                 return;
             }
 
-            // Assumes ISceneFlowService has a GoToPauseAsync() method
             await _sceneFlow.GoToPauseAsync();
         }
     }
