@@ -3,22 +3,35 @@ using UnityEngine;
 namespace hp55games.Mobile.Core.Pooling
 {
     /// <summary>
-    /// Global object pool service.
-    /// Reuses GameObjects instead of destroying/instantiating each time.
+    /// Generic object pooling service for any prefab-based object.
+    /// Works with MonoBehaviours, but you call it by prefab reference.
     /// </summary>
     public interface IObjectPoolService
     {
         /// <summary>
-        /// Returns an instance of the given prefab at the requested position/rotation.
-        /// If an inactive instance is available in the pool, it is reused.
-        /// Otherwise, a new one is instantiated.
+        /// Ensure there are at least 'count' instances pre-created (warm-up).
         /// </summary>
-        GameObject Spawn(GameObject prefab, Vector3 position, Quaternion rotation, Transform parent = null);
+        void WarmUp(PooledObject prefab, int count, Transform parent = null);
 
         /// <summary>
-        /// Returns the instance to the pool (deactivates it). 
-        /// If the instance was not created by the pool, it is simply Destroy()'d.
+        /// Get (or spawn) an instance of the given prefab.
         /// </summary>
-        void Despawn(GameObject instance);
+        GameObject Get(PooledObject prefab, Transform parent = null);
+
+        /// <summary>
+        /// Release an instance back to its pool.
+        /// If 'instance' was not created by the pool, you MAY Destroy it (optional).
+        /// </summary>
+        void Release(PooledObject instance);
+
+        /// <summary>
+        /// Clear all instances (for scene change / tests).
+        /// </summary>
+        void ClearAll();
+
+        /// <summary>
+        /// Clear only one prefab pool (optional ma molto comodo).
+        /// </summary>
+        void ClearPrefabPool(PooledObject prefab);
     }
 }
