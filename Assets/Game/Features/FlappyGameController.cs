@@ -4,6 +4,7 @@ using hp55games.Mobile.Core.Architecture;
 using hp55games.Mobile.Core.Context;
 using hp55games.Mobile.Core.Gameplay.Events;
 using hp55games.Mobile.Core.SceneFlow;
+using hp55games.Mobile.Core.Save;
 using hp55games.Mobile.Game.Events;
 using hp55games.Mobile.Game.UI;
 
@@ -25,6 +26,7 @@ namespace hp55games.Mobile.Game.FlappyTest
         private IGameContextService _context;
         private ISceneFlowService _sceneFlow;
         private IEventBus _bus;
+        private ISaveService _save;
 
         private int _score;
         private int _lives;
@@ -38,6 +40,7 @@ namespace hp55games.Mobile.Game.FlappyTest
             ServiceRegistry.TryResolve(out _context);
             _sceneFlow = ServiceRegistry.Resolve<ISceneFlowService>();
             _bus = ServiceRegistry.Resolve<IEventBus>();
+            _save = ServiceRegistry.Resolve<ISaveService>();
             
             _score = 0;
             _lives = _startingLives;
@@ -66,10 +69,7 @@ namespace hp55games.Mobile.Game.FlappyTest
         {
             AddScore(1);
         }
-
-        /// <summary>
-        /// Call this whenever the player successfully passes an obstacle / gains points.
-        /// </summary>
+        
         public void AddScore(int amount)
         {
             if (_isGameOver)
@@ -99,6 +99,14 @@ namespace hp55games.Mobile.Game.FlappyTest
             }
             
             _bus?.Publish(new PlayerDeathEvent());
+            
+            int finalScore = _context.Score;
+
+            if (finalScore > _save.Data.progress.bestScore)
+            {
+                _save.Data.progress.bestScore = finalScore;
+                _save.Save();
+            }
             
             GoToResults();
         }
