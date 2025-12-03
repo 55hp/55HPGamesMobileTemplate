@@ -18,14 +18,17 @@ namespace hp55games.Mobile.Game.UI
     {
         [Header("UI")]
         [SerializeField] private UILocalizedText _scoreLabel;
+        [SerializeField] private UILocalizedText _bestScoreLabel;
         [SerializeField] private Button _retryButton;
         [SerializeField] private Button _menuButton;
 
+        private ISaveService _save;
         private IGameContextService _context;
         private ISceneFlowService _sceneFlow;
 
         private void Awake()
         {
+            ServiceRegistry.TryResolve(out _save);
             ServiceRegistry.TryResolve(out _context);
             _sceneFlow = ServiceRegistry.Resolve<ISceneFlowService>();
 
@@ -42,6 +45,24 @@ namespace hp55games.Mobile.Game.UI
 
             if (_menuButton != null)
                 _menuButton.onClick.AddListener(OnMenuClicked);
+        }
+        
+        private void Start()
+        {
+            int finalScore = _context != null ? _context.Score : 0;
+            int bestScore  = _save != null ? _save.Data.progress.bestScore : 0;
+
+            if (_scoreLabel != null)
+            {
+                _scoreLabel.SetSuffix(" :" + finalScore);
+                _scoreLabel.Refresh();
+            }
+
+            if (_bestScoreLabel != null)
+            {
+                _bestScoreLabel.SetSuffix(" :" + bestScore);
+                _bestScoreLabel.Refresh();
+            }
         }
 
         private void OnDestroy()
