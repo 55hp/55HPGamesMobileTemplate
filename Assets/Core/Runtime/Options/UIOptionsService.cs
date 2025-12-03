@@ -1,7 +1,7 @@
 using System;
 using hp55games.Mobile.Core.Architecture;
-using hp55games.Mobile.Core.SaveService;
 using hp55games.Mobile.Core.Localization;
+using hp55games.Mobile.Core.Save;
 
 namespace hp55games.Mobile.Core.UI
 {
