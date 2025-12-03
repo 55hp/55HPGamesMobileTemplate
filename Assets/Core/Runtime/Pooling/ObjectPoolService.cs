@@ -3,86 +3,112 @@ using UnityEngine;
 
 namespace hp55games.Mobile.Core.Pooling
 {
-    /// <summary>
-    /// Simple object pool implementation keyed by prefab.
-    /// - Reuses inactive instances instead of destroying them.
-    /// - If an instance was not created by this pool, Despawn() will Destroy() it.
-    /// </summary>
     public sealed class ObjectPoolService : IObjectPoolService
     {
-        // Prefab -> queue of inactive instances
-        private readonly Dictionary<GameObject, Queue<GameObject>> _pool = new();
+        // Chiave = prefab GameObject (non l'istanza)
+        private readonly Dictionary<GameObject, Queue<GameObject>> _pools = new();
 
-        // Instance -> prefab (to know which queue to return it to)
-        private readonly Dictionary<GameObject, GameObject> _instanceToPrefab = new();
+        public void WarmUp(PooledObject prefab, int count, Transform parent = null)
+        {
+            if (count <= 0 || prefab == null) return;
 
-        public GameObject Spawn(GameObject prefab, Vector3 position, Quaternion rotation, Transform parent = null)
+            for (int i = 0; i < count; i++)
+            {
+                var go = Get(prefab, parent);
+                var po = go.GetComponent<PooledObject>();
+                Release(po);
+            }
+        }
+
+        public GameObject Get(PooledObject prefab, Transform parent = null)
         {
             if (prefab == null)
             {
-                Debug.LogError("[ObjectPoolService] Spawn called with null prefab.");
+                Debug.LogError("[ObjectPoolService] Get called with null prefab.");
                 return null;
+            }
+
+            var prefabGo = prefab.gameObject;
+
+            if (!_pools.TryGetValue(prefabGo, out var pool))
+            {
+                pool = new Queue<GameObject>();
+                _pools[prefabGo] = pool;
             }
 
             GameObject instance = null;
 
-            // Try to reuse from pool
-            if (_pool.TryGetValue(prefab, out var queue) && queue.Count > 0)
+            while (pool.Count > 0 && instance == null)
             {
-                instance = queue.Dequeue();
-                if (instance == null)
-                {
-                    // just in case something was destroyed externally
-                    return Spawn(prefab, position, rotation, parent);
-                }
+                instance = pool.Dequeue();
+            }
+
+            if (instance == null)
+            {
+                instance = Object.Instantiate(prefabGo, parent);
+                var po = instance.GetComponent<PooledObject>();
+                if (po == null) po = instance.AddComponent<PooledObject>();
+                po.OriginPrefab = prefabGo;
             }
             else
             {
-                // No pool for this prefab yet or empty -> create new
-                instance = Object.Instantiate(prefab);
-                _instanceToPrefab[instance] = prefab;
-
-                // Ensure it has PooledObject
-                var po = instance.GetComponent<PooledObject>();
-                if (po == null)
-                    po = instance.AddComponent<PooledObject>();
-
-                po.Prefab = prefab;
+                instance.transform.SetParent(parent, false);
+                instance.SetActive(true);
             }
-
-            // Setup transform and activate
-            var tr = instance.transform;
-            tr.SetParent(parent, worldPositionStays: false);
-            tr.SetPositionAndRotation(position, rotation);
-            instance.SetActive(true);
 
             return instance;
         }
 
-        public void Despawn(GameObject instance)
+        public void Release(PooledObject instance)
         {
-            if (instance == null)
-                return;
+            if (instance == null) return;
 
-            // Is this instance managed by the pool?
-            if (!_instanceToPrefab.TryGetValue(instance, out var prefab) || prefab == null)
+            var go = instance.gameObject;
+            var origin = instance.OriginPrefab;
+
+            if (origin == null)
             {
-                // Not managed -> destroy it
-                Object.Destroy(instance);
+                // Non sappiamo a quale pool appartiene → distruggiamo l'istanza
+                Object.Destroy(go);
                 return;
             }
 
-            // Deactivate and put back in the queue
-            instance.SetActive(false);
-            instance.transform.SetParent(null, worldPositionStays: false);
-
-            if (!_pool.TryGetValue(prefab, out var queue))
+            if (!_pools.TryGetValue(origin, out var pool))
             {
-                queue = new Queue<GameObject>();
-                _pool[prefab] = queue;
+                pool = new Queue<GameObject>();
+                _pools[origin] = pool;
             }
 
-            queue.Enqueue(instance);
+            go.SetActive(false);
+            go.transform.SetParent(null);
+            pool.Enqueue(go);
+        }
+
+        public void ClearAll()
+        {
+            foreach (var kvp in _pools)
+            {
+                foreach (var go in kvp.Value)
+                {
+                    if (go != null) Object.Destroy(go);
+                }
+            }
+            _pools.Clear();
+        }
+
+        public void ClearPrefabPool(PooledObject prefab)
+        {
+            if (prefab == null) return;
+
+            var prefabGo = prefab.gameObject;
+            if (!_pools.TryGetValue(prefabGo, out var pool)) return;
+
+            foreach (var go in pool)
+            {
+                if (go != null) Object.Destroy(go);
+            }
+
+            _pools.Remove(prefabGo);
         }
     }
 }
