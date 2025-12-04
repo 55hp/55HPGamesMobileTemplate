@@ -1,442 +1,344 @@
 # 🧱 55HP Unity Mobile Template – Core Template Overview v1
 
-*A Universal Mobile Starter Framework for Unity 2022 LTS+*
+# 📘 **55HP Core Template v1 — Overview & Architecture**
+
+*A flexible, production-ready foundation for Unity mobile games.*
 
 ---
 
-## 📌 **1. Mission & Philosophy**
+## **1. Introduction**
 
-The **55HP Unity Mobile Template** is a **practical, flexible and production-ready** starter framework designed to support **99% of mobile games**, from **hypercasual** to **midcore roguelites** (e.g., Slay the Spire–like), as well as **offline single-player experiences**.
+The **55HP Core Template** is a modular, scalable foundation for creating **99% of Unity mobile games**, from hypercasual prototypes to mid-core arcade titles and lightweight roguelites.
 
-The goal is simple:
+The template focuses on:
 
-> Avoid rewriting the same architecture for every new project.
-Enable fast prototyping AND stable production.
-Stay simple, readable, and game-agnostic.
-> 
+- **Consistency** – shared architecture across all projects
+- **Reusability** – mechanics and systems reusable across genres
+- **Simplicity** – low cognitive overhead, clean API surface
+- **Extensibility** – every module can grow independently
+- **Fast Iteration** – ideal for rapid prototyping, soft-launch testing, and mobile-friendly workflows
 
-This template is tailored for a **solo dev / small-team workflow**, especially one that values clarity, modularity, and the ability to integrate features back into the template over time.
-
-**Core principles:**
-
-1. **Practical > Perfect** — Real-world utility over academic purity.
-2. **Simple > Clever** — Clarity and readability come first.
-3. **Reusable > Specific** — Avoid game-specific logic inside the core.
-4. **Extensible > Rigid** — Easy to customize for multiple genres.
-5. **Consistent Architecture** — Always the same bootstrap, UI, audio, services, and flow.
+This document provides a complete overview of the template’s architecture and how each subsystem works together.
 
 ---
 
-## 📍 **2. High-Level Architecture**
+## **2. Project Structure**
 
-The template is built around:
-
-- **Additive scene structure**
-- **Async Finite State Machine (FSM)** controlling high-level game flow
-- **Service Registry** (simple DI)
-- **Save, Time, Config, Localization** services
-- **Universal UI Root** (navigation, popups, overlays, toasts)
-- **Audio system** (mixer, BGM crossfade, SFX routing)
-- **Addressables loader** (centralized asset/content loading)
-- **Object pooling** (lightweight, highly reusable)
-- **Input Service** (generic pointer/touch gestures)
-- **Game Context Service** (runtime session info)
-
-The **template boot sequence** always follows this flow:
+A typical project using the template is divided into:
 
 ```
-00_Bootstrap (startup)
- ├─ Install Services
- ├─ Load Additive Scenes:
- │    90_Systems_Audio
- │    91_UI_Root
- ├─ Load Initial Game Scene (01_Menu)
- └─ Enter MainMenuState (FSM)
+Assets/
+ ├── Core/
+ │    ├── Runtime/
+ │    │    ├── Architecture/       (Services, FSM, SceneFlow)
+ │    │    ├── Save/               (SaveService, SaveData, PlayerProgressData)
+ │    │    ├── Input/              (InputService + Driver)
+ │    │    ├── Events/             (Event Bus)
+ │    │    ├── UI/                 (UIRoot, Navigation, Popups, Toasts)
+ │    │    ├── Pooling/            (ObjectPoolService, PooledObject)
+ │    │    ├── Gameplay/           (Generic components)
+ │    │    └── Utils/              (Time, Logging, Helpers)
+ │    └── ...
+ │
+ ├── Game/                          (Project-specific content)
+ │    ├── Features/                 (Gameplay logic, controllers, systems)
+ │    ├── Content/                  (Prefabs, VFX, Audio, UI Screens)
+ │    └── ...
+ │
+ ├── UI/                            (Canvas, screens, pages, popups)
+ ├── Addressables/
+ └── Scenes/
+      ├── 01_Menu
+      ├── 02_Gameplay
+      ├── 03_Results
+      └── 91_UI_Root
 
 ```
 
 ---
 
-## 🧩 **3. Service Registry**
+## **3. Service Architecture**
 
-A lightweight service-locator providing:
+The template uses a lightweight **Service Registry** to expose global systems without relying on singletons.
 
-- **Global registration** at startup
-- **Resolve<T>()** for runtime access
-- No hidden magic, no external dependencies
+### **Key Principles**
 
-### Core Services Registered:
-
-- **ILog** (UnityLog)
-- **IEventBus**
-- **ISaveService**
-- **ITimeService**
-- **IConfigService**
-- **ILocalizationService**
-- **IUIOptionsService**
-- **IContentLoader**
-- **IGameStateMachine**
-- **IObjectPoolService**
-- **IUINavigationService**
-- **IUIPopupService**
-- **IUIOverlayService**
-- **IUIToastService**
-- **IGameContextService**
-- **IInputService**
-
----
-
-## 🎮 **4. Async Game State Machine (FSM)**
-
-A robust **async FSM** manages high-level game flow.
-
-Each state implements:
+- Services register themselves on startup.
+- No hidden singletons, no static state.
+- Consumers request dependencies via:
 
 ```csharp
-Task EnterAsync(CancellationToken ct);
-Task ExitAsync(CancellationToken ct);
-
+ServiceRegistry.TryResolve(out ITimeService time);
+ServiceRegistry.Resolve<IEventBus>().Publish(new X());
 ```
 
-Core states included:
+### **Why this approach?**
+
+- Decouples systems
+- Makes testing easier
+- Avoids “god-objects”
+- Provides a clean extensible API for future modules
+
+### **Core services available**
+
+- `IEventBus`
+- `IInputService`
+- `ITimeService`
+- `ISaveService`
+- `ISceneFlowService`
+- `IObjectPoolService`
+- `IUIPopupService`
+- `IUINavigationService`
+- `IUIToastService`
+
+---
+
+## **4. Game State Machine (FSM)**
+
+The FSM organizes gameplay flow across scenes and UI states.
+
+It supports async entering/exiting, scene transitions, and UI swap.
+
+### **Core states included**
 
 - `MainMenuState`
 - `GameplayState`
 - `PauseState`
-- `ResultsState`
-- `LoadingState`
+- `ResultState`
 
-States are **pure logic orchestration**:
+### **How FSM interacts with SceneFlow**
 
-no monobehaviour, no heavy dependencies, and interchangeable across games.
+- Each state defines:
+    - which scene must be active
+    - which UI screen should appear
+    - which metadata to update in GameContext
 
----
-
-## 🗺️ **5. Scene Architecture**
-
-### Required Scenes:
-
-- **00_Bootstrap** (entrypoint)
-- **90_Systems_Audio** (BGM, SFX, Input driver)
-- **91_UI_Root** (main UI system)
-- **01_Menu**
-- **02_Gameplay**
-- **03_Results**
-
-### SceneFlowService
-
-Handles transitions:
-
-- fade-in/out using UIOverlay
-- asynchronous loading
-- FSM state changes
-- safe transitions between Menu → Gameplay → Results
-
-Supports expandability (e.g., more states or scenes).
+The FSM is intentionally small and domain-agnostic, so each game can extend it with its own states.
 
 ---
 
-## 🖥️ **6. UI Architecture (Complete, Unified)**
+## **5. Input System**
 
-A powerful but simple UI system supporting:
+### **Components**
 
-- **Screens (pages)** via Navigation service
-- **Popups** (Addressables instantiable)
-- **Toasts**
-- **Overlays (fade, loading, input blocker)**
-- **Localization** integration
-- **Options** integration (audio, language, haptics)
+- **IInputService**
+    
+    High-level abstraction (`IsTap`, `IsPress`, `IsSwipe` if implemented).
+    
+- **InputServiceDriver**
+    
+    The MonoBehaviour that reads Unity’s native input and feeds the service.
+    
 
-### UI Root Responsibilities:
+### **Goals**
 
-- Controller for:
-    - Navigation stack
-    - Popup stack
-    - Toast queue
-    - Overlay panel
-- Global event binding for:
-    - Language change
-    - Options change
-- Initialization of UI layers and containers
+- Centralize input handling
+- Allow easy swapping for virtual joysticks, gestures, UI input
+- Decouple gameplay code from Unity APIs
 
-### UI Services:
+### **Usage**
 
-- **IUINavigationService**
-- **IUIPopupService**
-- **IUIOverlayService**
-- **IUIToastService**
-
-Addressables paths follow structure:
-
-```
-ui/screens/...
-ui/popups/...
-ui/elements/...
-
-```
-
-This system works for:
-
-- hypercasual menus
-- card-game interfaces
-- RPG screens
-- shop / inventory UIs
-- roguelike map UIs
-- cinematic overlays
-
----
-
-## 🔊 **7. Audio Architecture (Complete)**
-
-### Core Systems:
-
-- `90_Systems_Audio` contains:
-    - AudioMixer (Groups: Master, Music, SFX)
-    - MusicPlayer with crossfade
-    - Sound playback helper
-
-### Features:
-
-- **Crossfade BGM** (automatic or manual)
-- **Mute/Volume** tied to UIOptionsService
-- **Addressables** for loading music & SFX assets
-- **Haptics** support integrated via UIOptions
-
-This architecture is enough to support:
-
-- hypercasual loops
-- roguelite ambience layers
-- card-game UI SFX
-- SFX bursts with pooling
-- adaptive music systems (future-ready)
-
----
-
-## 💾 **8. Save System (JSON)**
-
-Simple, predictable, file-based save:
-
-- Persistent path: `save.json`
-- Classes:
-    - SaveData
-    - OptionsData
-    - TimeStampEntry
-
-Includes:
-
-- coins
-- profile
-- options (music, sfx, hapt, lang, mute)
-- timestamps (for cooldowns, login times, etc.)
-
----
-
-## ⏳ **9. Time Service**
-
-Provides:
-
-- `UtcNow`, `LocalNow`
-- monotonic time (`Time.realtimeSinceStartupAsDouble`)
-- timestamp logic:
-    - cooldown
-    - time since last
-    - daily checks
-- **clock-back detection** (anti-cheat safeguard)
-
----
-
-## ⚙️ **10. Config Service**
-
-Loads `GameConfig` from Addressables path:
-
-```
-hp55games.Addr.Config.Main
-
-```
-
-Allows:
-
-- game version
-- default difficulty
-- default haptics
-- any future config values
-
----
-
-## 📦 **11. Content Loader (Addressables)**
-
-Uniform entry point for Addressables:
-
-- `Load<T>(address)`
-- `InstantiateAsync(address)`
-- `Release(instance)`
-- `ReleaseAsset(asset)`
-
-Ensures consistent behavior across UI, FX, gameplay.
-
----
-
-## 🔁 **12. Object Pooling**
-
-Global pooling system:
-
-- prefab → queue of inactive instances
-- instance → original prefab
-- `Spawn()` and `Despawn()`
-- avoids GC allocs
-- supports UI, FX, bullets, VFX bursts
-
----
-
-## 🎮 **13. Input Service (NEW, Core)**
-
-A generic pointer/touch abstraction with these events:
-
-- `PointerDown`
-- `PointerUp`
-- `Tap`
-- `Hold`
-- `Swipe`
-
-Driven by `InputServiceDriver` placed in:
-
-```
-90_Systems_Audio
-
-```
-
-Supports:
-
-- hypercasual gesture gameplay
-- roguelike grid interaction
-- card games
-- puzzle/tap games
-- offline single-player interactions
-
-No gameplay specifics inside:
-
-just pure gesture abstraction.
-
----
-
-## 🌐 **14. Game Context Service (NEW, Core)**
-
-Stores **runtime-only** information:
-
-- ProfileId
-- CurrentRunSeed
-- CurrentLevelId
-- IsDebug
-- ResetRun()
-
-Useful for:
-
-- procedural games (Map Game, roguelikes)
-- games with sessions/runs
-- multi-profile setups
-- debugging helpers
-- avoiding global statics or SaveService abuse
-
-Not persisted automatically; you decide what to save.
-
----
-
-## 🧩 **15. Extending the Core**
-
-Patterns:
-
-- Add new states → register via FSM
-- Add new services → `ServiceRegistry.Register<T>`
-- Add new UI screens → Addressables + UI Navigation
-- Create new reusable features during games → backport to template in branches
-
----
-
-## 📁 **16. Recommended Folder Structure**
-
-```
-Assets/
-  Core/
-    Architecture/
-    FSM/
-    Save/
-    Time/
-    Config/
-    Context/
-    Input/
-    UI/
-      Navigation/
-      Popup/
-      Overlay/
-      Toast/
-      UIRoot/
-    Audio/
-    Addressables/
-    Pool/
-  Content/ (game-specific)
-  UI_Resources/ (localization)
-  Scenes/
-    00_Bootstrap
-    90_Systems_Audio
-    91_UI_Root
-    01_Menu
-    02_Gameplay
-    03_Results
-
+```csharp
+if (_input.IsTap)
+    Jump();
 ```
 
 ---
 
-## 📝 **17. Best Practices**
+## **6. Event Bus**
 
-- Keep Core free from gameplay logic
-- Keep UI generic
-- Use Addressables for everything non-code
-- Prefer async (FSM, scene flow, loading)
-- Keep SaveData small and meaningful
-- Use GameContext to avoid global chaos
-- Keep InputService minimal but consistent
-- Always test states with cancellation tokens
+The **Event Bus** is the communication backbone between gameplay systems, UI, and services.
 
----
+### **Why an event bus?**
 
-## 📌 **18. Summary**
+- Avoid direct references between UI ↔ gameplay
+- Unidirectional communication
+- Extremely cheap and predictable
+- Works well with pooling and heavy object churn
 
-The **55HP Unity Mobile Template** is a fully-featured, production-ready foundation to build *any* mobile game.
+### **Example**
 
-It includes every necessary architectural system:
+```csharp
+_bus.Subscribe<ScoreChangedEvent>(OnScoreChanged);
+_bus.Publish(new PlayerDeathEvent());
+```
 
-- Bootstrap
-- Services
-- FSM
-- UI
-- Audio
-- Save
-- Time
-- Context
-- Input
-- Pooling
-- Addressables
+### **Best use cases**
 
-No overengineering.
-
-No coupling with game-specific logic.
-
-Just a clean, extensible, universal mobile foundation.
+- Score updates
+- Player death
+- Level events
+- Power-up events
+- UI notifications
 
 ---
 
-# 🎉 Ready to Build Games
+## **7. Save System**
 
-With this template, each new game becomes:
+The save system uses JSON serialization with a structured `SaveData` model.
 
-> “Clone → Rename → Implement gameplay → Ship.”
-> 
+### **Key elements**
 
-And any generic feature you create while building games can be merged back into the template through branches like:
+- `SaveService` handles loading/saving, versioning, and disk I/O.
+- `SaveData` is the root object holding all persistent data.
+- `PlayerProgressData` stores generic long-term progress:
+    - `bestScore`
+    - `highestLevel`
+    - `lifetimeCoins`
+    - (extensible for any future game)
 
-- `feature/liveops`
-- `feature/economy-lite`
-- `feature/metaprogression`
-- `feature/ads`
-- etc.
+### **Reading & writing**
+
+```csharp
+var best = save.Data.progress.bestScore;
+save.Data.progress.bestScore = newBest;
+save.Save();
+```
+
+The system is intentionally minimal to keep overhead low and extensibility high.
+
+---
+
+## **8. Scene Flow Architecture**
+
+The **SceneFlowService** coordinates transitions between scenes and UI states.
+
+### **Responsibilities**
+
+- Loading target scenes
+- Ensuring UI Root always exists
+- Showing overlays during loads
+- Triggering FSM state changes
+
+### **Benefits**
+
+- Centralized navigation logic
+- Predictable transitions
+- Works seamlessly with Addressables
+- Clean separation between “gameplay logic” and “scene management”
+
+---
+
+## **9. UI System**
+
+The UI is designed to be **page-based**, flexible, and fully decoupled from gameplay code.
+
+### **Components**
+
+- **UIRoot**: top-level canvas, persistent across scenes
+- **IUINavigationService**: push/replace UI screens
+- **IUIPopupService**: modal windows
+- **IUIToastService**: transient notifications
+- **UILocalizedText**: supports prefix/suffix + localization keys
+
+### **UI Page Lifecycle**
+
+Each screen follows:
+
+```csharp
+OnNavigationIn()
+OnNavigationOut()
+OnNavigationReplaced()
+```
+
+This makes transitions predictable and allows animations or cross-fades.
+
+---
+
+## **10. Object Pooling System**
+
+Designed for heavy mobile workloads, where instantiating/destroying objects is expensive.
+
+### **Components**
+
+- `PooledObject`
+- `ObjectPoolService`
+- **Core gameplay helpers:**
+    - `TimedPooledSpawner2D`
+    - `DespawnWhenOutOfBounds2D`
+    - `DespawnAfterSeconds`
+    - `ConstantMover2D`
+
+### **Typical usage**
+
+```csharp
+var pipe = _pool.Get(pipePrefab);
+pipe.transform.position = spawnPosition;
+
+```
+
+### **Strengths**
+
+- Zero-garbage spawning
+- Works automatically with despawn components
+- Ideal for endless runners, bullet hells, VFX-heavy games
+
+---
+
+## **11. Core Gameplay Components**
+
+Standard reusable building blocks:
+
+### ✔️ TimedPooledSpawner2D
+
+Periodic spawn of pooled objects (pipes, enemies, coins).
+
+### ✔️ DespawnWhenOutOfBounds2D
+
+Automatic cleanup when objects leave the playable area.
+
+### ✔️ DespawnAfterSeconds
+
+Time-based despawn (ideal for VFX, projectiles).
+
+### ✔️ ConstantMover2D
+
+Uniform translation (endless runner, projectile, conveyor belts).
+
+All designed to be game-agnostic and flexible.
+
+---
+
+## **12. Mobile Build & Display Configuration**
+
+### Default orientation
+
+Most games should lock either **portrait** or **landscape** at the project level.
+
+### Recommended mobile settings
+
+- VSync off
+- TargetFrameRate = 60
+- Landscape Left / Right (depending on the game)
+- Flat Colors or 2D URP minimal for performance
+- Safe Area handling via UI root (optional future module)
+
+---
+
+## **13. Creating a New Game Using the Template**
+
+1. Clone the template
+2. Choose orientation (portrait/landscape)
+3. Set up scenes:
+    - Menu
+    - Gameplay
+    - Results
+    - UI Root
+4. Create main `GameController`
+5. Use core systems:
+    - InputService
+    - TimeService
+    - EventBus
+    - SaveService
+    - Pooling
+    - FSM & SceneFlow
+6. Build UI pages via NavigationService
+7. Implement gameplay loop
+8. Add results & progression
+9. Polish and publish
+
+This workflow allows you to create new games extremely quickly while maintaining clean, reusable architecture.
+
+---
+
+# 🎉 **End of Document – Main Overview Ready**
