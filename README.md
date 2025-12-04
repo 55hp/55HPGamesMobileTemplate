@@ -1,7 +1,5 @@
 # 🧱 55HP Unity Mobile Template – Core Template Overview v1
 
-# 📘 **55HP Core Template v1 — Overview & Architecture**
-
 *A flexible, production-ready foundation for Unity mobile games.*
 
 ---
