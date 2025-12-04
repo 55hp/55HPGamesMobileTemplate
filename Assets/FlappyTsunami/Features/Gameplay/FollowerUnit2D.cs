@@ -14,6 +14,7 @@ namespace hp55games.FlappyTsunami.Features.Gameplay
         [SerializeField] private float tapDelay = 0f;
 
         private Rigidbody2D _rb;
+        private float _baseGravityScale;
         private bool _isAlive = true;
 
         public bool IsAlive => _isAlive;
@@ -21,6 +22,7 @@ namespace hp55games.FlappyTsunami.Features.Gameplay
         private void Awake()
         {
             _rb = GetComponent<Rigidbody2D>();
+            _baseGravityScale = _rb.gravityScale;
         }
 
         /// <summary>
@@ -71,6 +73,17 @@ namespace hp55games.FlappyTsunami.Features.Gameplay
         public void SetSwarm(PlayerSwarmController2D newSwarm)
         {
             swarm = newSwarm;
+        }
+        
+        public void SetGravityEnabled(bool enabled)
+        {
+            if (_rb == null)
+            {
+                _rb = GetComponent<Rigidbody2D>();
+                _baseGravityScale = _rb.gravityScale;
+            }
+
+            _rb.gravityScale = enabled ? _baseGravityScale : 0f;
         }
     }
 }

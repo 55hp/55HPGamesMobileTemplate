@@ -1,23 +1,118 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
+using hp55games.Mobile.Core.Architecture;
+using hp55games.Mobile.Core.Gameplay.Events;
+using hp55games.Mobile.Core.InputSystem;
 
 namespace hp55games.FlappyTsunami.Features.Gameplay
 {
     public class PlayerSwarmController2D : MonoBehaviour
     {
         [Header("Followers")]
-        [SerializeField] private List<FollowerUnit2D> followers = new List<FollowerUnit2D>();
+        [SerializeField]
+        private List<FollowerUnit2D> followers = new List<FollowerUnit2D>();
 
         [Header("Movement")]
-        [SerializeField] private float tapImpulse = 5f;
+        [SerializeField]
+        private float tapImpulse = 5f;
+        
+        [Header("Run Start")]
+        [SerializeField] private List<MonoBehaviour> runStartBehaviours = new(); 
 
-        private void Update()
+        private IEventBus _eventBus;
+        private IInputService _inputService;
+        private bool _isAlive = true;
+        private bool _runStarted = false;
+
+        private void Awake()
         {
-            // TEMP: input grezzo Unity. Più avanti lo sostituiremo con IInputService del template.
-            if (Input.GetMouseButtonDown(0))
+            // EventBus: già usato prima
+            _eventBus = ServiceRegistry.Resolve<IEventBus>();
+
+            // InputService: usiamo il servizio del core
+            if (!ServiceRegistry.TryResolve<IInputService>(out _inputService))
             {
-                BroadcastTap();
+                Debug.LogError("[PlayerSwarmController2D] IInputService not found. " +
+                               "Check that InputServiceInstaller / driver are loaded.");
             }
+            else
+            {
+                _inputService.Tap += OnTap;
+            }
+
+            // Se la lista è vuota, auto-popola con i follower figli
+            if (followers == null || followers.Count == 0)
+            {
+                followers = new List<FollowerUnit2D>(GetComponentsInChildren<FollowerUnit2D>());
+            }
+        }
+
+        private void Start()
+        {
+            foreach (var follower in followers)
+            {
+                if (follower != null)
+                {
+                    follower.SetGravityEnabled(false);
+                }
+            }
+
+            // 🔹 Prima della run: spawner & co. disattivi
+            foreach (var behaviour in runStartBehaviours)
+            {
+                if (behaviour != null)
+                {
+                    behaviour.enabled = false;
+                }
+            }
+        }
+
+
+        private void OnDestroy()
+        {
+            if (_inputService != null)
+            {
+                _inputService.Tap -= OnTap;
+            }
+        }
+
+        private void OnTap(Vector2 screenPosition)
+        {
+            if (!_isAlive)
+                return;
+            
+            if (!_runStarted)
+            {
+                StartRun();
+            }
+
+            BroadcastTap();
+        }
+        
+        private void StartRun()
+        {
+            _runStarted = true;
+
+            // Attiva gravità
+            foreach (var follower in followers)
+            {
+                if (follower != null)
+                {
+                    follower.SetGravityEnabled(true);
+                }
+            }
+
+            // Attiva spawner & co.
+            foreach (var behaviour in runStartBehaviours)
+            {
+                if (behaviour != null)
+                {
+                    behaviour.enabled = true;
+                }
+            }
+
+            Debug.Log("[PlayerSwarmController2D] Run started.");
         }
 
         private void BroadcastTap()
@@ -33,12 +128,8 @@ namespace hp55games.FlappyTsunami.Features.Gameplay
             }
         }
 
-        /// <summary>
-        /// Chiamato da un FollowerUnit2D quando muore.
-        /// </summary>
         public void NotifyFollowerDied(FollowerUnit2D unit)
         {
-            // Controlla se è rimasto almeno un follower vivo.
             bool anyAlive = false;
 
             foreach (var follower in followers)
@@ -50,14 +141,15 @@ namespace hp55games.FlappyTsunami.Features.Gameplay
                 }
             }
 
-            if (!anyAlive)
+            if (!anyAlive && _isAlive)
             {
-                // TODO: qui più avanti scatterà il GAME OVER (event, FSM, ecc.)
-                Debug.Log("[PlayerSwarmController2D] Tutti i follower sono morti -> Game Over.");
+                _isAlive = false;
+
+                _eventBus.Publish(new PlayerDeathEvent());
+                Debug.Log("[PlayerSwarmController2D] Tutti i follower sono morti -> Game Over (PlayerDeathEvent).");
             }
         }
-
-        // Opzionale: per debug rapido, così puoi vedere quanti sono vivi.
+        
         public int GetAliveFollowersCount()
         {
             int count = 0;
