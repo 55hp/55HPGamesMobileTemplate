@@ -12,6 +12,7 @@ namespace hp55games.Mobile.Core.Context
         public bool   IsDebug        { get; set; }
 
         public int Score { get; set; }
+        public int BestScore { get; set; }
         public int Lives { get; set; } = -1; // -1 = "no lives system" by default
 
         public void ResetRun()

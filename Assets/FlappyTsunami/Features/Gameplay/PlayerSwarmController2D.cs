@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using hp55games.Mobile.Core.Architecture;
+using hp55games.Mobile.Core.Context;
 using hp55games.Mobile.Core.Gameplay.Events;
 using hp55games.Mobile.Core.InputSystem;
 
@@ -22,6 +23,7 @@ namespace hp55games.FlappyTsunami.Features.Gameplay
 
         private IEventBus _eventBus;
         private IInputService _inputService;
+        private IGameContextService _contextService;
         private bool _isAlive = true;
         private bool _runStarted = false;
 
@@ -29,6 +31,7 @@ namespace hp55games.FlappyTsunami.Features.Gameplay
         {
             // EventBus: già usato prima
             _eventBus = ServiceRegistry.Resolve<IEventBus>();
+            _contextService = ServiceRegistry.Resolve<IGameContextService>();
 
             // InputService: usiamo il servizio del core
             if (!ServiceRegistry.TryResolve<IInputService>(out _inputService))
@@ -126,6 +129,15 @@ namespace hp55games.FlappyTsunami.Features.Gameplay
                     follower.OnSwarmTap(baseImpulse);
                 }
             }
+            
+            // TODO: lo score ora è "tap counter": quando sistemo gli ostacoli, sposta la logica su distanza / ostacoli superati
+
+            if (_contextService != null)
+            {
+                _contextService.Score += 1;
+            }
+
+            _eventBus?.Publish(new ScoreChangedEvent());
         }
 
         public void NotifyFollowerDied(FollowerUnit2D unit)

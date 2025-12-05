@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using hp55games.Mobile.Core.Architecture;
+using hp55games.Mobile.Core.Context;
 using hp55games.Mobile.Core.Gameplay.Events;
 using hp55games.Mobile.Core.SceneFlow;
 
@@ -13,21 +14,18 @@ namespace hp55games.FlappyTsunami.Features.Gameplay
     /// </summary>
     public class GameplayController : MonoBehaviour
     {
-        [Header("Flow settings")]
-        [SerializeField]
-        private bool goToResultsOnPlayerDeath = true;
-
         private ISceneFlowService _sceneFlow;
         private IEventBus _eventBus;
         private IDisposable _deathSub;
+        private IGameContextService _context;
+        private ISaveService _save;
 
         private void Awake()
         {
             _sceneFlow = ServiceRegistry.Resolve<ISceneFlowService>();
             _eventBus  = ServiceRegistry.Resolve<IEventBus>();
-
-            // Pattern identico a qualsiasi altro listener di EventBus:
-            // Subscribe in Awake / OnEnable, Unsubscribe in OnDestroy / OnDisable.
+            _save= ServiceRegistry.Resolve<ISaveService>();
+            _context = ServiceRegistry.Resolve<IGameContextService>();
             _deathSub = _eventBus.Subscribe<PlayerDeathEvent>(OnPlayerDeath);
         }
 
@@ -36,21 +34,38 @@ namespace hp55games.FlappyTsunami.Features.Gameplay
                 _deathSub?.Dispose();
         }
 
-        private async void OnPlayerDeath(PlayerDeathEvent evt)
+        private async void OnPlayerDeath(PlayerDeathEvent _)
         {
-            if (!goToResultsOnPlayerDeath)
-                return;
-
-            if (_sceneFlow == null)
+            if (_context == null || _save == null)
             {
-                Debug.LogWarning("[GameplayFlowController] SceneFlowService not available.");
+                Debug.LogWarning("[GameplayController] Context o Save mancano quando arriva PlayerDeathEvent.");
                 return;
             }
 
-            Debug.Log("[GameplayFlowController] PlayerDeathEvent received -> GoToResultsAsync");
-            await _sceneFlow.GoToResultsAsync();
-        }
+            var currentScore = _context.Score;
 
+            // Leggi best esistente
+            _save.Load();
+            var bestScore = _save.Data.progress.bestScore;
+
+            // Se questa run è meglio, aggiorna e salva
+            if (currentScore > bestScore)
+            {
+                _save.Data.progress.bestScore = currentScore;
+                _save.Save();
+
+                // TODO: qui in futuro puoi triggerare un feedback "NUOVO RECORD!"
+            }
+
+            // Aggiorna il contesto così UI / ResultState leggono il valore giusto
+            _context.BestScore = bestScore;
+
+            // Vai ai risultati
+            if (_sceneFlow != null)
+            {
+                await _sceneFlow.GoToResultsAsync();
+            }
+        }
         // 🔜 In futuro puoi aggiungere altri handler qui:
         // - OnAchievementUnlocked(AchievementUnlockedEvent evt)
         // - OnRunStarted(RunStartedEvent evt)

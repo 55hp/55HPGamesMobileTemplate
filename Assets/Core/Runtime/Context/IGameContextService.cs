@@ -22,6 +22,9 @@ namespace hp55games.Mobile.Core.Context
         /// <summary>Current score for this run (optional, can be 0 if unused).</summary>
         int Score { get; set; }
 
+        /// <summary>Best score (optional, can be 0 if unused).</summary>
+        int BestScore { get; set; }
+
         /// <summary>Current lives for this run (optional, can be 0 or -1 if unused).</summary>
         int Lives { get; set; }
 
