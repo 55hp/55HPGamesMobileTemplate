@@ -5,6 +5,7 @@ using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.SceneManagement;
 using hp55games.Mobile.Core.Architecture;
 using hp55games.Mobile.Core.SceneFlow;
+using hp55games.Mobile.Core.AppLifecycle;
 
 namespace hp55games.Mobile.Core.Bootstrap
 {
@@ -20,6 +21,7 @@ namespace hp55games.Mobile.Core.Bootstrap
         private void Awake()
         {
             DontDestroyOnLoad(gameObject);
+            gameObject.AddComponent<AppLifecycleHandler>();
             StartCoroutine(BootstrapSequence());
         }
 

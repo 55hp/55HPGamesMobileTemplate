@@ -7,6 +7,9 @@ using hp55games.Mobile.Core.UI;
 using hp55games.Mobile.Core.Timing;
 using hp55games.Mobile.Core.InputSystem;
 using hp55games.Mobile.Core.Context;
+using hp55games.Mobile.Core.Haptics;
+using hp55games.Mobile.Core.Ads;
+using hp55games.Mobile.Core.Analytics;
 
 namespace hp55games.Mobile.Core.Architecture
 {
@@ -41,6 +44,12 @@ namespace hp55games.Mobile.Core.Architecture
             Register<IGameContextService>(new GameContextService());
             
             Register<IInputService>(new InputService());
+
+            Register<IHapticsService>(new HapticsService());
+
+            Register<IAdsService>(new NoOpAdsService());
+
+            Register<IAnalyticsService>(new DebugLogAnalyticsService());
         }
 
         public static void Register<T>(T instance) => _map[typeof(T)] = instance!;
