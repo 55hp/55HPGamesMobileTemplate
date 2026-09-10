@@ -28,7 +28,7 @@ Each folder below is its own asmdef and compiles as a separate assembly — resp
 - `Core.Runtime` (`Assets/Core/Runtime`) — the template engine: architecture, services, save, input, UI abstractions, pooling, gameplay helpers. Namespace root: `hp55games.Mobile.Core.*`.
 - `UI.Runtime` (`Assets/Core/Runtime/UIScripts`) — concrete UI runtime (navigation, popups, overlays, toasts, HUD).
 - `Core.Editor` / `Core.Runtime.CommandSequence.Editor` — editor-only tooling.
-- `Game.Content` / `Game.Features` (currently under `Assets/FlappyTsunami/`) — project-specific gameplay content/features that sit on top of Core. The docs describe this layer as living under `Assets/Game/`; in the current working tree it's still under the demo game folder `FlappyTsunami` (a prior cleanup commit references removing "FlappyTsunami contamination" from the template — check `git log`/current state before assuming which convention applies when adding new game-specific code).
+- `Game.Content` (`Assets/GameSpecific/Content/`) / `Game.Features` (`Assets/GameSpecific/Features/`) — project-specific gameplay content and features that sit on top of Core. FlappyTsunami was removed in commit `18a2563`; game-specific code now lives under `Assets/GameSpecific/`.
 - `hp55games.Tests.EditMode` / `hp55games.Tests.PlayMode` (`Assets/Tests`) — test assemblies, kept separate from game scenes/content.
 
 ## Core architecture
@@ -146,6 +146,19 @@ Prefer this over direct UI↔gameplay references for cross-cutting notifications
 - No singletons/static mutable state for gameplay/service concerns — go through `ServiceRegistry`.
 - Async operations (state transitions, UI navigation, scene flow, music) use `Task`/`async`/`CancellationToken`, not coroutines, except where interfacing directly with Unity APIs that require them (e.g. `GameBootstrap`'s scene-load coroutine, which predates/coexists with the async services).
 - Keep test code under `Assets/Tests/EditMode` or `Assets/Tests/PlayMode` — never alongside game/content scenes.
+
+## Branch convention
+
+- `main` — stable, merge-only. Never push directly.
+- `develop` — active work branch. All Claude Code work goes here.
+- Merge `develop` → `main` at milestones only, after Franci's review.
+
+## External reference documentation
+
+Full system-by-system documentation (interfaces, responsibilities, pitfalls, Claude Code implementation instructions, Bezi Editor setup instructions, Template integration notes) is maintained on Notion:
+https://app.notion.com/p/3d7d95a4678981368f73ef582482767e
+
+Covers: Core Gameplay, Combat & Damage, AI & Behavior, UI & Menu, Input & Controls, Audio, Persistenza & Dati, Progressione & Economy, Narrative & Dialogue, Sistemi Tecnici Trasversali. Each system has a "Claude Code — Implementazione" section with namespace, file path, dependencies, and required patterns. Consult before implementing any system listed there.
 
 ## Refactor & cleanup proposals
 

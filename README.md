@@ -38,7 +38,7 @@ Assets/
  │    │    └── Utils/              (Time, Logging, Helpers)
  │    └── ...
  │
- ├── Game/                          (Project-specific content)
+ ├── GameSpecific/                   (Project-specific content)
  │    ├── Features/                 (Gameplay logic, controllers, systems)
  │    ├── Content/                  (Prefabs, VFX, Audio, UI Screens)
  │    └── ...
