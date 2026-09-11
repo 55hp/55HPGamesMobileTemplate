@@ -26,7 +26,7 @@ namespace hp55games.Mobile.Core.Gameplay.Environment
 
         private void Awake()
         {
-            Camera cam = Camera.main;
+            UnityEngine.Camera cam = UnityEngine.Camera.main;
 
             if (cam == null)
             {

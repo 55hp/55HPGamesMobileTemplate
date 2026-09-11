@@ -11,7 +11,10 @@ namespace hp55games.Mobile.Core.Gameplay.Environment
         [SerializeField] private float referenceZ = -4f;
 
         [Header("Camera")]
-        [SerializeField] private Camera _camera;
+        // Fully qualified: hp55games.Mobile.Core.Gameplay.Camera (Phase 3) is a sibling
+        // namespace under Gameplay, so an unqualified "Camera" here would resolve to that
+        // namespace instead of UnityEngine.Camera.
+        [SerializeField] private UnityEngine.Camera _camera;
 
         [Header("Debug")]
         [Tooltip("Se true, non modifica speedMultiplier — lascia i valori serializzati invariati.")]
@@ -24,7 +27,7 @@ namespace hp55games.Mobile.Core.Gameplay.Environment
         {
             if (overrideAutoCalculation) return;
 
-            if (_camera == null) _camera = Camera.main;
+            if (_camera == null) _camera = UnityEngine.Camera.main;
             if (_camera == null)
             {
                 Debug.LogWarning("[ParallaxSpeedProvider] Camera.main not found.", this);

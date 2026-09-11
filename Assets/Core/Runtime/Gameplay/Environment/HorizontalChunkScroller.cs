@@ -44,7 +44,10 @@ namespace hp55games.Mobile.Core.Gameplay.Environment
         private float[]       _chunkWidths;     // width of the currently active instance per slot
         private int[]         _prefabIndices;   // current prefab index per slot
 
-        private Camera _camera;
+        // Fully qualified: hp55games.Mobile.Core.Gameplay.Camera (Phase 3) is a sibling
+        // namespace under Gameplay, so an unqualified "Camera" here would resolve to that
+        // namespace instead of UnityEngine.Camera.
+        private UnityEngine.Camera _camera;
 
         // ── console colours ───────────────────────────────────────────────────
         private const string C_WIDTH   = "#FFD700";
@@ -53,7 +56,7 @@ namespace hp55games.Mobile.Core.Gameplay.Environment
 
         private void Awake()
         {
-            _camera = Camera.main;
+            _camera = UnityEngine.Camera.main;
             if (_camera == null)
                 Debug.LogWarning($"[HorizontalChunkScroller] '{name}': Camera.main not found — recycle bound will use fallback.", this);
 
@@ -248,7 +251,7 @@ namespace hp55games.Mobile.Core.Gameplay.Environment
             // Lazy re-fetch: the camera may live in a different scene (e.g. menu loaded
             // additively) and may not be tagged MainCamera yet when Awake runs here.
             if (_camera == null)
-                _camera = Camera.main;
+                _camera = UnityEngine.Camera.main;
 
             float speedMargin = baseScrollSpeed * speedMultiplier * Time.deltaTime;
 
