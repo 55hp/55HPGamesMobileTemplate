@@ -153,6 +153,9 @@ Prefer this over direct UI↔gameplay references for cross-cutting notifications
 - `develop` — active work branch. All Claude Code work goes here.
 - Merge `develop` → `main` at milestones only, after Franci's review.
 
+## Commit message convention
+- start with a short word, such us `Fix - `, `Add - `, `Upd - `, `Rmv - `... followed by a short description of the change, e.g. `Fix - Corrected namespace for GameStateMachine`.
+
 ## External reference documentation
 
 Full system-by-system documentation (interfaces, responsibilities, pitfalls, Claude Code implementation instructions, Bezi Editor setup instructions, Template integration notes) is maintained on Notion:
