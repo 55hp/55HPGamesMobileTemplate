@@ -13,7 +13,10 @@
         "Unity.Services.CloudSave",
         "Unity.Services.Economy",
         "Unity.Services.Leaderboards",
-        "Unity.Services.RemoteConfig"
+        "Unity.Services.RemoteConfig",
+        "Unity.LevelPlay",
+        "Unity.Purchasing",
+        "Unity.Advertisement.IosSupport"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
