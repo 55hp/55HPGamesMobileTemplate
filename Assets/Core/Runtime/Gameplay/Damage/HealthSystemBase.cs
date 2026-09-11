@@ -66,8 +66,11 @@ namespace hp55games.Mobile.Core.Gameplay.Damage
 
         void IDamageable.TakeDamage(DamageContext ctx)
         {
+            // Resolve the fatal-contact override (raw HP-drop amount) before handing off to
+            // FromContext, which otherwise just forwards ctx.Amount as-is.
             float amount = ctx.IsFatal ? _currentHealth : ctx.Amount;
-            ApplyDamage(new DamageInfo(amount, DamageType.Physical, ctx.Source, ctx.ContactPoint));
+            var resolvedCtx = new DamageContext(ctx.Source, ctx.ContactPoint, amount, false);
+            ApplyDamage(DamageInfo.FromContext(resolvedCtx, DamageType.Physical));
         }
 
         /// <summary>Hook for subclasses reacting to damage (VFX, sound, camera shake, ...).</summary>
