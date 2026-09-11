@@ -10,6 +10,7 @@ using hp55games.Mobile.Core.Context;
 using hp55games.Mobile.Core.Haptics;
 using hp55games.Mobile.Core.Ads;
 using hp55games.Mobile.Core.Analytics;
+using hp55games.Mobile.Core.Privacy;
 
 namespace hp55games.Mobile.Core.Architecture
 {
@@ -50,6 +51,13 @@ namespace hp55games.Mobile.Core.Architecture
             Register<IAdsService>(new NoOpAdsService());
 
             Register<IAnalyticsService>(new DebugLogAnalyticsService());
+
+            // Dossier Fase 4: deliberate exception to "new adapters this phase aren't
+            // registered by default" — DefaultConsentService needs no per-project SDK key or
+            // catalog, it's platform API only (ATT on iOS, Granted elsewhere), so there's
+            // nothing project-specific blocking a default registration the way there is for
+            // LevelPlay/Firebase/IAP. See DefaultConsentService's own doc comment.
+            Register<IConsentService>(new DefaultConsentService());
         }
 
         public static void Register<T>(T instance) => _map[typeof(T)] = instance!;
