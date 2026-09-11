@@ -7,6 +7,9 @@ using hp55games.Mobile.Core.Architecture;
 using hp55games.Mobile.Core.SceneFlow;
 using hp55games.Mobile.Core.AppLifecycle;
 using hp55games.Mobile.Core.Save;
+using hp55games.Mobile.Core.Progression;
+using hp55games.Mobile.Core.Social;
+using hp55games.Mobile.Core.Config;
 
 namespace hp55games.Mobile.Core.Bootstrap
 {
@@ -70,7 +73,9 @@ namespace hp55games.Mobile.Core.Bootstrap
 
         /// <summary>
         /// Initializes Unity Gaming Services and, only on success, signs in anonymously and
-        /// registers IAuthenticationService/ICloudSaveService. Deliberately NOT part of
+        /// registers IAuthenticationService/ICloudSaveService (Phase 2) plus IEconomyService/
+        /// ILeaderboardService/IRemoteConfigService (dossier Fase 3) — one UGS core init and
+        /// one sign-in gating all five, not a separate coroutine per service. Deliberately NOT part of
         /// ServiceRegistry.InstallDefaults(): Unity.Services.Core.UnityServices.InitializeAsync()
         /// is async and can fail (no network, UGS project not linked for this Unity project),
         /// and InstallDefaults() must stay synchronous for every one of its other
@@ -105,8 +110,9 @@ namespace hp55games.Mobile.Core.Bootstrap
 
             if (initTask.IsFaulted)
             {
-                log.Error("[GameBootstrap] UnityServices.InitializeAsync failed — " +
-                          "IAuthenticationService/ICloudSaveService will remain unregistered. " +
+                log.Error("[GameBootstrap] UnityServices.InitializeAsync failed — all five " +
+                          "UGS-backed services (Auth, CloudSave, Economy, Leaderboards, " +
+                          "RemoteConfig) will remain unregistered. " +
                           initTask.Exception?.GetBaseException().Message);
                 yield break;
             }
@@ -118,14 +124,24 @@ namespace hp55games.Mobile.Core.Bootstrap
 
             if (signInTask.IsFaulted || !signInTask.Result)
             {
-                log.Error("[GameBootstrap] UGS anonymous sign-in failed — " +
-                          "IAuthenticationService/ICloudSaveService will remain unregistered.");
+                log.Error("[GameBootstrap] UGS anonymous sign-in failed — all five " +
+                          "UGS-backed services (Auth, CloudSave, Economy, Leaderboards, " +
+                          "RemoteConfig) will remain unregistered.");
                 yield break;
             }
 
             ServiceRegistry.Register<IAuthenticationService>(auth);
             ServiceRegistry.Register<ICloudSaveService>(new UGSCloudSaveService());
-            log.Info("[GameBootstrap] UGS Authentication + Cloud Save registered.");
+
+            // Dossier Fase 3: Economy/Leaderboards/RemoteConfig gate on the same successful
+            // UnityServices.InitializeAsync() + sign-in above — one UGS core init/sign-in
+            // pair, five registrations, not five separate coroutines re-checking the same thing.
+            ServiceRegistry.Register<IEconomyService>(new UGSEconomyService());
+            ServiceRegistry.Register<ILeaderboardService>(new UGSLeaderboardService());
+            ServiceRegistry.Register<IRemoteConfigService>(new UGSRemoteConfigService());
+
+            log.Info("[GameBootstrap] UGS Authentication + Cloud Save + Economy + " +
+                     "Leaderboards + Remote Config registered.");
         }
 
         private static IEnumerator LoadSceneAdditiveCoroutine(string scenePath)
